@@ -10,12 +10,12 @@ namespace UB
 
         [Header("External References")]
         [HideInInspector] public PlayerInputManager PlayerInputManager { get; private set; }
-        private override void Awake()
+        public override void Awake()
         {
             base.Awake();
         }
 
-        private override void Start()
+        public override void Start()
         {
             base.Start();
 
@@ -30,12 +30,12 @@ namespace UB
             PlayerInputManager.Player = this;
         }
 
-        private override void Update()
+        public override void Update()
         {
             base.Update();
         }
 
-        private override void OnDestroy()
+        public override void OnDestroy()
         {
             base.OnDestroy();
 

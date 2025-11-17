@@ -7,32 +7,32 @@ namespace UB
         [Header("Flags")]
         [HideInInspector] public bool IsPerformingAction;
 
-        private virtual void Awake()
+        public virtual void Awake()
         {
 
         }
 
-        private virtual void Start()
+        public virtual void Start()
         {
 
         }
 
-        private virtual void Update()
+        public virtual void Update()
         {
 
         }
 
-        private virtual void FixedUpdate()
+        public virtual void FixedUpdate()
         {
 
         }
 
-        private virtual void LateUpdate()
+        public virtual void LateUpdate()
         {
 
         }
 
-        private virtual void OnDestroy()
+        public virtual void OnDestroy()
         {
 
         }
