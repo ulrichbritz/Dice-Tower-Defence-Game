@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fabb6567018194d41b29526dc68e24fc, type: 3}
+  m_Name: D6_Standard
+  m_EditorClassIdentifier: 
+  DieName: Standard Six Sided Die
+  Description: 
+  DieFaces:
+  - FaceNumber: 1
+    Rotation: {x: 0, y: 0, z: 0}
+  - FaceNumber: 2
+    Rotation: {x: 0, y: 90, z: 0}
+  - FaceNumber: 3
+    Rotation: {x: 0, y: 180, z: 0}
+  - FaceNumber: 4
+    Rotation: {x: 0, y: -90, z: 0}
+  - FaceNumber: 5
+    Rotation: {x: -90, y: 0, z: 0}
+  - FaceNumber: 6
+    Rotation: {x: 90, y: 0, z: 0}
+  Model: {fileID: 1131659816781192, guid: d2870cdcb8b498140bc1cae6a808fb0f, type: 3}
