@@ -1,3 +1,4 @@
+using AsyncRoutines;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,7 +23,8 @@ namespace UB
 
         private void OnNewGameButtonClicked()
         {
-            
+            // Load scene index 1 (WorldScene_01) with fade transition - automatically unloads current scene
+            WorldRoutineManager.Instance.Run(WorldSceneManager.Instance.TransitionToSceneAsync(1, true));
         }
 
         private void OnLoadGameButtonClicked()

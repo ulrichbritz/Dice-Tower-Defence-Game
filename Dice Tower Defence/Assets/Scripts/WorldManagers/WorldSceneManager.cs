@@ -46,6 +46,29 @@ namespace UB
         }
         
         /// <summary>
+        /// Load a scene asynchronously by build index (replaces current scene)
+        /// </summary>
+        public async Routine LoadSceneAsync(int sceneIndex)
+        {
+            string sceneName = GetSceneNameFromIndex(sceneIndex);
+            OnSceneLoadStarted?.Invoke(sceneName);
+            
+            var startTime = Time.time;
+            var operation = SceneManager.LoadSceneAsync(sceneIndex);
+            
+            // Monitor progress
+            while (!operation.isDone) {
+                OnSceneLoadProgress?.Invoke(sceneName, operation.progress);
+                await RoutineBase.WaitForNextFrame();
+            }
+            
+            // Ensure minimum load time for UX
+            await WaitForMinimumLoadTime(startTime);
+            
+            OnSceneLoadCompleted?.Invoke(sceneName);
+        }
+        
+        /// <summary>
         /// Load a scene additively (keeps current scene loaded)
         /// </summary>
         public async Routine LoadSceneAdditiveAsync(string sceneName)
@@ -59,6 +82,37 @@ namespace UB
             
             var startTime = Time.time;
             var operation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+            
+            // Monitor progress
+            while (!operation.isDone)
+            {
+                OnSceneLoadProgress?.Invoke(sceneName, operation.progress);
+                await RoutineBase.WaitForNextFrame();
+            }
+            
+            // Ensure minimum load time for UX
+            await WaitForMinimumLoadTime(startTime);
+            
+            loadedAdditiveScenes.Add(sceneName);
+            OnSceneLoadCompleted?.Invoke(sceneName);
+        }
+        
+        /// <summary>
+        /// Load a scene additively by build index (keeps current scene loaded)
+        /// </summary>
+        public async Routine LoadSceneAdditiveAsync(int sceneIndex)
+        {
+            string sceneName = GetSceneNameFromIndex(sceneIndex);
+            
+            if (loadedAdditiveScenes.Contains(sceneName)) {
+                Debug.LogWarning($"Scene '{sceneName}' is already loaded additively");
+                return;
+            }
+            
+            OnSceneLoadStarted?.Invoke(sceneName);
+            
+            var startTime = Time.time;
+            var operation = SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Additive);
             
             // Monitor progress
             while (!operation.isDone)
@@ -95,47 +149,26 @@ namespace UB
         }
         
         /// <summary>
-        /// Load a new scene and unload the previous one (smooth transition)
+        /// Load a new scene by index and unload the previous one (smooth transition)
         /// </summary>
-        public async Routine TransitionToSceneAsync(string newSceneName, string sceneToUnload = null, bool useFadeTransition = false)
+        public async Routine TransitionToSceneAsync(int sceneIndex, bool useFadeTransition = false)
         {
             if (useFadeTransition && fadeOverlay != null) {
-                // Phase 1: Start fade out and scene loading simultaneously
-                var fadeOutTask = UITweens.FadeImageColor(fadeOverlay, Color.black, fadeTransitionTime);
-                var sceneLoadTask = LoadSceneAdditiveAsync(newSceneName);
+                // Phase 1: Fade out
+                await UITweens.FadeImageColor(fadeOverlay, Color.black, fadeTransitionTime);
                 
-                // Wait for both fade out AND scene loading to complete
-                await fadeOutTask;
-                await sceneLoadTask;
+                // Phase 2: Load new scene (this automatically unloads the current scene)
+                await LoadSceneAsync(sceneIndex);
                 
-                // Phase 2: Set new scene as active
-                var newScene = SceneManager.GetSceneByName(newSceneName);
-                if (newScene.isLoaded) {
-                    SceneManager.SetActiveScene(newScene);
-                }
-                
-                // Phase 3: Unload old scene if specified
-                if (!string.IsNullOrEmpty(sceneToUnload)) {
-                    await UnloadSceneAsync(sceneToUnload);
-                }
-                
-                // Phase 4: Fade in (minimum time guaranteed by fadeTransitionTime)
+                // Phase 3: Fade in
                 await UITweens.FadeImageColor(fadeOverlay, Color.clear, fadeTransitionTime);
             }
             else {
-                // No fade transition - use original logic
-                await LoadSceneAdditiveAsync(newSceneName);
-                
-                var newScene = SceneManager.GetSceneByName(newSceneName);
-                if (newScene.isLoaded) {
-                    SceneManager.SetActiveScene(newScene);
-                }
-                
-                if (!string.IsNullOrEmpty(sceneToUnload)) {
-                    await UnloadSceneAsync(sceneToUnload);
-                }
+                // No fade transition - direct load
+                await LoadSceneAsync(sceneIndex);
             }
         }
+
         
         /// <summary>
         /// Get all currently loaded additive scenes
@@ -160,6 +193,20 @@ namespace UB
                 float remainingTime = minimumLoadTime - elapsedTime;
                 await RoutineBase.WaitForSeconds(remainingTime);
             }
+        }
+        
+        /// <summary>
+        /// Helper method to get scene name from build index
+        /// </summary>
+        private string GetSceneNameFromIndex(int sceneIndex)
+        {
+            if (sceneIndex < 0 || sceneIndex >= SceneManager.sceneCountInBuildSettings) {
+                Debug.LogWarning($"Scene index {sceneIndex} is out of range. Available scenes: 0-{SceneManager.sceneCountInBuildSettings - 1}");
+                return $"Scene_{sceneIndex}"; // Fallback name
+            }
+            
+            string scenePath = SceneUtility.GetScenePathByBuildIndex(sceneIndex);
+            return System.IO.Path.GetFileNameWithoutExtension(scenePath);
         }
         
         protected override void OnDestroy()
