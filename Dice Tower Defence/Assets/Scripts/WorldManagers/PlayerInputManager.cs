@@ -33,7 +33,7 @@ namespace UB
 
         private void OnSceneChange(Scene oldScene, Scene newScene)
         {
-            if (newScene.buildIndex == WorldSaveGameManager.Instance.WorldSceneIndex) {
+            if (newScene.buildIndex == WorldSceneManager.Instance.WorldSceneIndex) {
                 Instance.enabled = true;
 
                 if (playerControls != null) {

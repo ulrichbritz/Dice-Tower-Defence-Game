@@ -7,8 +7,13 @@ using UnityEngine.UI;
 
 namespace UB
 {
+    /// <summary>
+    /// Manages scene loading and unloading in the game world
+    /// </summary>
     public class WorldSceneManager : WorldManager<WorldSceneManager>
     {
+        public int WorldSceneIndex { get; private set; } = 1;// The build index of the main world scene
+
         [Header("Scene Loading Settings")]
         [SerializeField] private float minimumLoadTime = 1.0f; // Prevent flashing on fast loads
         [SerializeField] private Image fadeOverlay; // UI overlay for scene transitions

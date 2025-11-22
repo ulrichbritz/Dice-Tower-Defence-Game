@@ -1,47 +1,54 @@
 using UnityEngine;
 
-public abstract class WorldManager<T> : MonoBehaviour where T : WorldManager<T>
+namespace UB
 {
-    public static T Instance { get; private set; }
+    /// <summary>
+    /// Base class for world manager singletons
+    /// </summary>
 
-    protected virtual void Awake()
+    public abstract class WorldManager<T> : MonoBehaviour where T : WorldManager<T>
     {
-        CreateInstance();
-    }
+        public static T Instance { get; private set; }
 
-    protected virtual void Start()
-    {
-
-    }
-
-    protected virtual void Update()
-    {
-
-    }
-
-    protected virtual void FixedUpdate()
-    {
-
-    }
-
-    protected virtual void LateUpdate()
-    {
-
-    }
-
-    protected virtual void OnDestroy()
-    {
-
-    }
-
-    private void CreateInstance()
-    {
-        if (Instance == null) {
-            Instance = this as T;
-            DontDestroyOnLoad(gameObject);
+        protected virtual void Awake()
+        {
+            CreateInstance();
         }
-        else {
-            Destroy(gameObject);
+
+        protected virtual void Start()
+        {
+
+        }
+
+        protected virtual void Update()
+        {
+
+        }
+
+        protected virtual void FixedUpdate()
+        {
+
+        }
+
+        protected virtual void LateUpdate()
+        {
+
+        }
+
+        protected virtual void OnDestroy()
+        {
+
+        }
+
+        private void CreateInstance()
+        {
+            if (Instance == null) {
+                Instance = this as T;
+                DontDestroyOnLoad(gameObject);
+            }
+            else {
+                Destroy(gameObject);
+            }
         }
     }
 }

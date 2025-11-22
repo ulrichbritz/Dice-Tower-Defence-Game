@@ -6,7 +6,7 @@ using UnityEngine.UI;
 namespace UB
 {
     /// <summary>
-    /// Professional button enhancement component for UI polish
+    /// Button enhancement component for UI polish
     /// Adds subtle animations and visual feedback to buttons
     /// </summary>
     [RequireComponent(typeof(Button))]

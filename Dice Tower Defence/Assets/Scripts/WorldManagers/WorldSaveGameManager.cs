@@ -6,9 +6,12 @@ using System.IO;
 
 namespace UB
 {
+    /// <summary>
+    /// Manages saving and loading of game state
+    /// </summary>
     public class WorldSaveGameManager : WorldManager<WorldSaveGameManager>
     {
-        public int WorldSceneIndex { get; private set; } = 1;// The build index of the main world scene
+        public GameObject PlayerPrefab;
 
         protected override void Awake()
         {

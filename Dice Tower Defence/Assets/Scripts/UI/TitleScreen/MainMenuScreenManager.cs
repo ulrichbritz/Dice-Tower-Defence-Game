@@ -23,8 +23,7 @@ namespace UB
 
         private void OnNewGameButtonClicked()
         {
-            // Load scene index 1 (WorldScene_01) with fade transition - automatically unloads current scene
-            WorldRoutineManager.Instance.Run(WorldSceneManager.Instance.TransitionToSceneAsync(1, true));
+            WorldRoutineManager.Instance.Run(StartNewGame());
         }
 
         private void OnLoadGameButtonClicked()
@@ -35,6 +34,15 @@ namespace UB
         private void OnQuitButtonClicked()
         {
             Application.Quit();
+        }
+
+        private async Routine StartNewGame()
+        {
+            Instantiate(WorldSaveGameManager.Instance.PlayerPrefab);
+            await WorldSceneManager.Instance.TransitionToSceneAsync(1, true);
+            // Show the first wave
+            // Open the in-game shop UI
+            PlayerUIManager.Instance.OpenInGameShopMenu();
         }
 
         private void OnDestroy()
