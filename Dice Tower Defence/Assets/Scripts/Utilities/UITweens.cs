@@ -193,5 +193,131 @@ namespace UB
             
             target.localPosition = originalPosition;
         }
+        
+        /// <summary>
+        /// Conditional pulse animation that continues while a condition is met
+        /// Perfect for UI button selection states that need to be stoppable
+        /// </summary>
+        public static async Routine ConditionalPulse(Transform target, System.Func<bool> shouldContinue, 
+            float pulseScale = 1.05f, float pulseDuration = 0.3f)
+        {
+            if (target == null || shouldContinue == null) return;
+            
+            Vector3 originalScale = target.localScale;
+            
+            while (shouldContinue())
+            {
+                // Scale up
+                await ScaleTo(target, originalScale * pulseScale, pulseDuration);
+                if (!shouldContinue()) break;
+                
+                // Scale down
+                await ScaleTo(target, originalScale, pulseDuration);
+                if (!shouldContinue()) break;
+            }
+            
+            // Ensure we return to original scale when stopping
+            target.localScale = originalScale;
+        }
+        
+        /// <summary>
+        /// Smooth rotation transition to target rotation
+        /// </summary>
+        public static async Routine RotateTo(Transform target, Vector3 targetRotation, float duration)
+        {
+            if (target == null) return;
+            
+            Vector3 startRotation = target.localEulerAngles;
+            float elapsedTime = 0f;
+            
+            while (elapsedTime < duration) {
+                elapsedTime += Time.deltaTime;
+                float progress = elapsedTime / duration;
+                
+                // Smooth easing curve
+                float easedProgress = Mathf.SmoothStep(0f, 1f, progress);
+                target.localEulerAngles = Vector3.Lerp(startRotation, targetRotation, easedProgress);
+                
+                await RoutineBase.WaitForNextFrame();
+            }
+            
+            // Ensure exact target rotation
+            target.localEulerAngles = targetRotation;
+        }
+        
+        /// <summary>
+        /// Conditional wobble animation that continues while a condition is met
+        /// Perfect for UI button selection states with rotation feedback
+        /// </summary>
+        public static async Routine ConditionalWobble(Transform target, System.Func<bool> shouldContinue,
+            float maxRotation = 5f, float wobbleDuration = 0.3f)
+        {
+            if (target == null || shouldContinue == null) return;
+            
+            Vector3 originalRotation = target.localEulerAngles;
+            
+            while (shouldContinue())
+            {
+                // Wobble left
+                await RotateTo(target, originalRotation + Vector3.forward * maxRotation, wobbleDuration);
+                if (!shouldContinue()) break;
+                
+                // Wobble right  
+                await RotateTo(target, originalRotation - Vector3.forward * maxRotation, wobbleDuration);
+                if (!shouldContinue()) break;
+            }
+            
+            // Return to original rotation when stopping
+            target.localEulerAngles = originalRotation;
+        }
+        
+        /// <summary>
+        /// Conditional color pulse animation for sophisticated UI glow effects
+        /// Perfect for card game/roguelike button polish
+        /// </summary>
+        public static async Routine ConditionalColorPulse(UnityEngine.UI.Image target, System.Func<bool> shouldContinue,
+            Color baseColor, Color glowColor, float pulseDuration = 0.5f)
+        {
+            if (target == null || shouldContinue == null) return;
+            
+            while (shouldContinue())
+            {
+                // Glow up
+                await ColorTo(target, glowColor, pulseDuration);
+                if (!shouldContinue()) break;
+                
+                // Glow down
+                await ColorTo(target, baseColor, pulseDuration);
+                if (!shouldContinue()) break;
+            }
+            
+            // Return to base color when stopping
+            target.color = baseColor;
+        }
+        
+        /// <summary>
+        /// Smooth color transition to target color
+        /// </summary>
+        public static async Routine ColorTo(UnityEngine.UI.Image target, Color targetColor, float duration)
+        {
+            if (target == null) return;
+            
+            Color startColor = target.color;
+            float elapsedTime = 0f;
+            
+            while (elapsedTime < duration) {
+                elapsedTime += Time.deltaTime;
+                float progress = elapsedTime / duration;
+                
+                // Smooth easing curve
+                float easedProgress = Mathf.SmoothStep(0f, 1f, progress);
+                target.color = Color.Lerp(startColor, targetColor, easedProgress);
+                
+                await RoutineBase.WaitForNextFrame();
+            }
+            
+            // Ensure exact target color
+            target.color = targetColor;
+        }
     }
 }

@@ -17,6 +17,13 @@ namespace UB
         [SerializeField] private float pressScale = 0.95f;
         [SerializeField] private float animationDuration = 0.15f;
         
+        [Header("Selection Effects")]
+        [SerializeField] private bool enableGlowEffect = true;
+        [SerializeField] private float glowIntensity = 1.2f;
+        [SerializeField] private bool enableShimmer = true;
+        [SerializeField] private float shimmerSpeed = 1.5f;
+        [SerializeField] private Color shimmerColor = new Color(1f, 0.9f, 0.4f, 0.3f); // Subtle gold
+        
         [Header("Visual Effects")]
         [SerializeField] private bool enableHoverGlow = true;
         [SerializeField] private Color defaultColor = new Color(0.3f, 0.3f, 0.3f, 1f); // Medium dark grey
@@ -36,6 +43,8 @@ namespace UB
         private Vector3 originalScale;
         private Color originalColor;
         private RoutineHandle pulseAnimation;
+        private RoutineHandle glowAnimation;
+        private RoutineHandle scaleAnimation;
         private bool isSelected;
         private bool isHovered;
         
@@ -113,21 +122,31 @@ namespace UB
                 buttonImage.color = hoverColor;
             }
             
-            // Start pulse immediately
+            // Start all selection effects
             if (enableSelectPulse) {
                 StartPulseAnimation();
             }
+            
+            if (enableGlowEffect) {
+                StartGlowEffect();
+            }
+            
+            // Scale up for hover effect
+            StartScaleToHover();
         }
         
         public void OnDeselect(BaseEventData eventData)
         {
             isSelected = false;
-            StopPulseAnimation();
+            StopAllAnimations();
             
-            // Instant return to default color
+            // Smooth return to original state
             if (buttonImage != null) {
                 buttonImage.color = defaultColor;
             }
+            
+            // Reset scale to original
+            ResetTransformToOriginal();
         }
         
         #endregion
@@ -148,7 +167,10 @@ namespace UB
         private void StartPulseAnimation()
         {
             StopPulseAnimation();
-            pulseAnimation = WorldRoutineManager.Instance.Run(PulseLoop());
+            float pulseDuration = animationDuration / pulseSpeed;
+            pulseAnimation = WorldRoutineManager.Instance.Run(
+                UITweens.ConditionalPulse(transform, () => isSelected, pulseScale, pulseDuration)
+            );
         }
         
         private void StopPulseAnimation()
@@ -158,22 +180,43 @@ namespace UB
             }
         }
         
-        private async Routine PulseLoop()
+        private void StartGlowEffect()
         {
-            while (isSelected)
-            {
-                // Simple pulse: normal scale to slightly larger and back
-                float pulseDuration = animationDuration / pulseSpeed;
-                
-                await UITweens.ScaleTo(transform, originalScale * pulseScale, pulseDuration);
-                if (!isSelected) break; // Exit if deselected during animation
-                
-                await UITweens.ScaleTo(transform, originalScale, pulseDuration);
-                if (!isSelected) break; // Exit if deselected during animation
+            StopGlowAnimation();
+            // Subtle glow effect using color intensity
+            glowAnimation = WorldRoutineManager.Instance.Run(
+                UITweens.ConditionalColorPulse(buttonImage, () => isSelected, hoverColor, hoverColor * glowIntensity, animationDuration)
+            );
+        }
+        
+        private void StopGlowAnimation()
+        {
+            if (!glowAnimation.IsDead) {
+                glowAnimation.Stop();
             }
-            
-            // Ensure we're back at original scale
-            transform.localScale = originalScale;
+        }
+        
+        private void StartScaleToHover()
+        {
+            StopScaleAnimation();
+            scaleAnimation = WorldRoutineManager.Instance.Run(
+                UITweens.ScaleTo(transform, originalScale * hoverScale, animationDuration)
+            );
+        }
+        
+        private void StopScaleAnimation()
+        {
+            if (!scaleAnimation.IsDead) {
+                scaleAnimation.Stop();
+            }
+        }
+        
+        private void ResetTransformToOriginal()
+        {
+            // Smoothly return to original state
+            scaleAnimation = WorldRoutineManager.Instance.Run(
+                UITweens.ScaleTo(transform, originalScale, animationDuration)
+            );
         }
         
         #endregion
@@ -199,6 +242,8 @@ namespace UB
         private void StopAllAnimations()
         {
             StopPulseAnimation();
+            StopGlowAnimation();
+            StopScaleAnimation();
         }
         
         private void PlaySound(AudioClip clip)
