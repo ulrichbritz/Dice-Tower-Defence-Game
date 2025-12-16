@@ -2,11 +2,8 @@ using UnityEngine;
 
 namespace UB
 {
-    public class CharacterManager : MonoBehaviour
+    public abstract class CharacterLocomotionManager : MonoBehaviour
     {
-        [Header("Flags")]
-        [HideInInspector] public bool IsPerformingAction;
-
         public virtual void Awake()
         {
 
@@ -28,6 +25,11 @@ namespace UB
         }
 
         public virtual void LateUpdate()
+        {
+
+        }
+
+        public virtual void HandleMovement()
         {
 
         }

@@ -4,10 +4,6 @@ namespace UB
 {
     public class PlayerManager : CharacterManager
     {
-        [Header("Internal References")]
-        [HideInInspector] public Animator Animator { get; private set; }
-        [HideInInspector] public Rigidbody Rigidbody { get; private set; }
-
         [Header("External References")]
         [HideInInspector] public PlayerInputManager PlayerInputManager { get; private set; }
         public override void Awake()
@@ -19,9 +15,9 @@ namespace UB
         {
             base.Start();
 
+            DontDestroyOnLoad(this.gameObject);
+
             // Internal References Initialization
-            Animator = GetComponent<Animator>();
-            Rigidbody = GetComponent<Rigidbody>();
 
             // External References Initialization
             PlayerInputManager = PlayerInputManager.Instance;
@@ -40,8 +36,6 @@ namespace UB
             base.OnDestroy();
 
             // Internal References Cleanup
-            Animator = null;
-            Rigidbody = null;
 
             // External References Cleanup and Unlink
             PlayerInputManager.Player = null;
