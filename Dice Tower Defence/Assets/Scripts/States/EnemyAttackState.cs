@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace UB
 {
-    public class ChaseState : State
+    public class EnemyAttackState : AttackState
     {
         public override State RunCurrentState()
         {
