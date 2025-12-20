@@ -11,6 +11,12 @@ namespace UB
         [Header("External References")]
         [HideInInspector] public PlayerManager Player { get; set; }
 
+        [Header("PlayerMovement")]
+        private Vector2 movementInput;
+        private float verticalInput;
+        private float horizontalInput;
+        private float moveAmount;
+
         //[Header("Player Actions")]
 
         protected override void Awake()
@@ -33,6 +39,7 @@ namespace UB
 
         private void OnSceneChange(Scene oldScene, Scene newScene)
         {
+            // Enable playercontrols in world scene only
             if (newScene.buildIndex == WorldSceneManager.Instance.WorldSceneIndex) {
                 Instance.enabled = true;
 
@@ -53,8 +60,8 @@ namespace UB
         {
             if (playerControls == null) {
                 playerControls = new PlayerControls();
-                // Camera
-                //playerControls.PlayerCamera.Movement.performed += ctx => cameraInput = ctx.ReadValue<Vector2>();
+                // Movement 
+                playerControls.PlayerMovement.Movement.performed += ctx => movementInput = ctx.ReadValue<Vector2>();
 
                 // Player Actions
                 //playerControls.PlayerActions.Roll.performed += ctx => dodgeInput = true;
@@ -72,7 +79,31 @@ namespace UB
 
         private void HandleAllInputs()
         {
+            if (Player == null) {
+                return;
+            }
+
+            // Movement Input
+            HandleMovementInput();
             // Player Actions
+        }
+
+        private void HandleMovementInput()
+        {
+            verticalInput = movementInput.y;
+            horizontalInput = movementInput.x;
+
+            // Return absolute numbers to ensure positive values
+            moveAmount = Mathf.Clamp01(Mathf.Abs(horizontalInput) + Mathf.Abs(verticalInput));
+
+            if (moveAmount <= 0.5f && moveAmount > 0f) {
+                moveAmount = 0.5f;
+            }
+            else if (moveAmount > 0.5f && moveAmount <= 1f) {
+                moveAmount = 1f;
+            }
+
+            Player.PlayerLocomotionManager.SetMovementInputs(verticalInput, horizontalInput, moveAmount);
         }
 
         private void OnApplicationFocus(bool focus)

@@ -4,37 +4,37 @@ namespace UB
 {
     public abstract class CharacterLocomotionManager : MonoBehaviour
     {
-        public virtual void Awake()
+        protected virtual void Awake()
         {
 
         }
 
-        public virtual void Start()
+        protected virtual void Start()
         {
 
         }
 
-        public virtual void Update()
+        protected virtual void Update()
         {
 
         }
 
-        public virtual void FixedUpdate()
+        protected virtual void FixedUpdate()
         {
 
         }
 
-        public virtual void LateUpdate()
+        protected virtual void LateUpdate()
         {
 
         }
 
-        public virtual void HandleMovement()
+        protected virtual void HandleMovement()
         {
 
         }
 
-        public virtual void OnDestroy()
+        protected virtual void OnDestroy()
         {
 
         }

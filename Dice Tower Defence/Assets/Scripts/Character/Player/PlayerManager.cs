@@ -4,20 +4,28 @@ namespace UB
 {
     public class PlayerManager : CharacterManager
     {
+        [Header("Internal References")]
+        [HideInInspector] public PlayerLocomotionManager PlayerLocomotionManager { get; private set; }
+        [HideInInspector] public PlayerAnimatorManager PlayerAnimatorManager { get; private set; }
+        [HideInInspector] public PlayerStatsManager PlayerStatsManager { get; private set; }
+
         [Header("External References")]
         [HideInInspector] public PlayerInputManager PlayerInputManager { get; private set; }
-        public override void Awake()
+        protected override void Awake()
         {
             base.Awake();
         }
 
-        public override void Start()
+        protected override void Start()
         {
             base.Start();
 
             DontDestroyOnLoad(this.gameObject);
 
             // Internal References Initialization
+            PlayerLocomotionManager = GetComponent<PlayerLocomotionManager>();
+            PlayerAnimatorManager = GetComponent<PlayerAnimatorManager>();
+            PlayerStatsManager = GetComponent<PlayerStatsManager>();
 
             // External References Initialization
             PlayerInputManager = PlayerInputManager.Instance;
@@ -26,12 +34,14 @@ namespace UB
             PlayerInputManager.Player = this;
         }
 
-        public override void Update()
+        protected override void Update()
         {
             base.Update();
+
+            PlayerLocomotionManager.HandleAllMovement();
         }
 
-        public override void OnDestroy()
+        protected override void OnDestroy()
         {
             base.OnDestroy();
 

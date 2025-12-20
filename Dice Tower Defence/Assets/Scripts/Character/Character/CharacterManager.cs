@@ -18,7 +18,7 @@ namespace UB
         [Header("Flags")]
         [HideInInspector] public bool IsPerformingAction;
 
-        public virtual void Awake()
+        protected virtual void Awake()
         {
             // Internal References Initialization
             // Components
@@ -32,27 +32,27 @@ namespace UB
 
         }
 
-        public virtual void Start()
+        protected virtual void Start()
         {
 
         }
 
-        public virtual void Update()
+        protected virtual void Update()
         {
 
         }
 
-        public virtual void FixedUpdate()
+        protected virtual void FixedUpdate()
         {
 
         }
 
-        public virtual void LateUpdate()
+        protected virtual void LateUpdate()
         {
 
         }
 
-        public virtual void OnDestroy()
+        protected virtual void OnDestroy()
         {
             // Internal References Cleanup
             Animator = null;

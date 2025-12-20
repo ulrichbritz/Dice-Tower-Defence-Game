@@ -12,12 +12,12 @@ namespace UB
         [Header("Movement Settings")]
         private Transform BarricadeTarget;
 
-        public override void Awake()
+        protected override void Awake()
         {
             base.Awake();
         }
 
-        public override void Start()
+        protected override void Start()
         {
             base.Start();
 
@@ -29,27 +29,27 @@ namespace UB
             EnemyManager.NavMeshAgent.stoppingDistance = EnemyManager.CharacterStatsManager.StoppingDistance;
         }
 
-        public override void Update()
+        protected override void Update()
         {
             base.Update();
         }
 
-        public override void FixedUpdate()
+        protected override void FixedUpdate()
         {
             base.FixedUpdate();
         }
 
-        public override void LateUpdate()
+        protected override void LateUpdate()
         {
             base.LateUpdate();
         }
 
-        public override void HandleMovement()
+        protected override void HandleMovement()
         {
 
         }
 
-        public override void OnDestroy()
+        protected override void OnDestroy()
         {
             base.OnDestroy();
 

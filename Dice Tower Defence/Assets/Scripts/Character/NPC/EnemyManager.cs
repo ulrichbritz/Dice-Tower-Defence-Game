@@ -9,12 +9,12 @@ namespace UB
         [HideInInspector] public NavMeshAgent NavMeshAgent { get; private set; }
         [HideInInspector] public EnemyStateManager EnemyStateManager { get; private set; }
         
-        public override void Awake()
+        protected override void Awake()
         {
 
         }
 
-        public override void Start()
+        protected override void Start()
         {
             base.Start();
 
@@ -22,22 +22,22 @@ namespace UB
             EnemyStateManager = GetComponent<EnemyStateManager>();
         }
 
-        public override void Update()
+        protected override void Update()
         {
 
         }
 
-        public override void FixedUpdate()
+        protected override void FixedUpdate()
         {
 
         }
 
-        public override void LateUpdate()
+        protected override void LateUpdate()
         {
 
         }
 
-        public override void OnDestroy()
+        protected override void OnDestroy()
         {
             base.OnDestroy();
 
