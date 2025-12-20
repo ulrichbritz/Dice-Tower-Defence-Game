@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: a727576f81c948b46a159afe1fa91787
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 251438
+  packageName: Massive GreatSword AnimSet
+  packageVersion: 1.01
+  assetPath: Assets/MassiveGreatSword_AnimSet/AnimatorContrl/Combo03_1.controller
+  uploadId: 712282

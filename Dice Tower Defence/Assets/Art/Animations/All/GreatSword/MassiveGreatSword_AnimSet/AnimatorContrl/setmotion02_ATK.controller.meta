@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 26237e4db2598a24e9667bfa556fbf1b
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 251438
+  packageName: Massive GreatSword AnimSet
+  packageVersion: 1.01
+  assetPath: Assets/MassiveGreatSword_AnimSet/AnimatorContrl/setmotion02_ATK.controller
+  uploadId: 712282

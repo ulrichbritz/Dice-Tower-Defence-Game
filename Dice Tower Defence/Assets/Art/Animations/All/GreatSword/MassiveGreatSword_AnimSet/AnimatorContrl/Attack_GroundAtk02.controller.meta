@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 3506804e5344e3742a883f37ca24ca30
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 251438
+  packageName: Massive GreatSword AnimSet
+  packageVersion: 1.01
+  assetPath: Assets/MassiveGreatSword_AnimSet/AnimatorContrl/Attack_GroundAtk02.controller
+  uploadId: 712282

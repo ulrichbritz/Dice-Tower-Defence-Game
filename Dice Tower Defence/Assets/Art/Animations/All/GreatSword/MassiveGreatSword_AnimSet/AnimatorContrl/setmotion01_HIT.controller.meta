@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 0ecea9b6257c69549b8198b55bf4bd46
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 251438
+  packageName: Massive GreatSword AnimSet
+  packageVersion: 1.01
+  assetPath: Assets/MassiveGreatSword_AnimSet/AnimatorContrl/setmotion01_HIT.controller
+  uploadId: 712282
