@@ -20,6 +20,11 @@ namespace UB
 
         protected virtual void Awake()
         {
+
+        }
+
+        protected virtual void Start()
+        {
             // Internal References Initialization
             // Components
             Animator = GetComponent<Animator>();
@@ -29,12 +34,6 @@ namespace UB
 
             // Scripts
             CharacterStatsManager = GetComponent<CharacterStatsManager>();
-
-        }
-
-        protected virtual void Start()
-        {
-
         }
 
         protected virtual void Update()

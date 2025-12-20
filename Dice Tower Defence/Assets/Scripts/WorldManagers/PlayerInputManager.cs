@@ -104,6 +104,7 @@ namespace UB
             }
 
             Player.PlayerLocomotionManager.SetMovementInputs(verticalInput, horizontalInput, moveAmount);
+            Player.PlayerAnimatorManager.UpdateAnimatorMovementParameters(0, moveAmount);
         }
 
         private void OnApplicationFocus(bool focus)
