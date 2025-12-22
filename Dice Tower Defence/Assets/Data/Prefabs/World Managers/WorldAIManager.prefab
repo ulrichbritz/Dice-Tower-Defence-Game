@@ -44,8 +44,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09e004d9741e4e549b01f3cb9fcff583, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnemyGroup1: []
-  spawnPoints:
+  Zombies:
+  - {fileID: 5484650090085370812, guid: 17f3d3c3b6e02c84cb9a19952eaebbdd, type: 3}
+  - {fileID: 5484650090085370812, guid: 17f3d3c3b6e02c84cb9a19952eaebbdd, type: 3}
+  - {fileID: 5484650090085370812, guid: 17f3d3c3b6e02c84cb9a19952eaebbdd, type: 3}
+  - {fileID: 5484650090085370812, guid: 17f3d3c3b6e02c84cb9a19952eaebbdd, type: 3}
+  - {fileID: 5484650090085370812, guid: 17f3d3c3b6e02c84cb9a19952eaebbdd, type: 3}
+  - {fileID: 5484650090085370812, guid: 17f3d3c3b6e02c84cb9a19952eaebbdd, type: 3}
+  - {fileID: 5484650090085370812, guid: 17f3d3c3b6e02c84cb9a19952eaebbdd, type: 3}
+  - {fileID: 5484650090085370812, guid: 17f3d3c3b6e02c84cb9a19952eaebbdd, type: 3}
+  - {fileID: 5484650090085370812, guid: 17f3d3c3b6e02c84cb9a19952eaebbdd, type: 3}
+  - {fileID: 5484650090085370812, guid: 17f3d3c3b6e02c84cb9a19952eaebbdd, type: 3}
+  enemySpawnPoints:
   - {x: -27.52029, y: 0, z: 2.6672106}
   - {x: -31.163359, y: 0, z: 2.5831146}
   - {x: -31.428917, y: 0, z: -0.06629038}
