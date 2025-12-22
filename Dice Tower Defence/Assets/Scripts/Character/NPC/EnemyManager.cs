@@ -8,6 +8,8 @@ namespace UB
         [Header("Enemy Components")]
         [HideInInspector] public NavMeshAgent NavMeshAgent { get; private set; }
         [HideInInspector] public EnemyStateManager EnemyStateManager { get; private set; }
+        [HideInInspector] public EnemyLocomotionManager EnemyLocomotionManager { get; private set; }
+        [HideInInspector] public EnemyStatsManager EnemyStatsManager { get; private set; }
         
         protected override void Awake()
         {
@@ -20,6 +22,8 @@ namespace UB
 
             NavMeshAgent = GetComponent<NavMeshAgent>();
             EnemyStateManager = GetComponent<EnemyStateManager>();
+            EnemyLocomotionManager = GetComponent<EnemyLocomotionManager>();
+            EnemyStatsManager = GetComponent<EnemyStatsManager>();
         }
 
         protected override void Update()

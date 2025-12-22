@@ -24,9 +24,9 @@ namespace UB
             EnemyManager = GetComponent<EnemyManager>();
 
             // Set NavMeshAgent speed based on CharacterStats
-            EnemyManager.NavMeshAgent.speed = EnemyManager.CharacterStatsManager.MovementSpeed;
-            EnemyManager.NavMeshAgent.acceleration = EnemyManager.CharacterStatsManager.Acceleration;
-            EnemyManager.NavMeshAgent.stoppingDistance = EnemyManager.CharacterStatsManager.StoppingDistance;
+            EnemyManager.NavMeshAgent.speed = EnemyManager.EnemyStatsManager.MovementSpeed;
+            EnemyManager.NavMeshAgent.acceleration = EnemyManager.EnemyStatsManager.Acceleration;
+            EnemyManager.NavMeshAgent.stoppingDistance = EnemyManager.EnemyStatsManager.StoppingDistance;
         }
 
         protected override void Update()

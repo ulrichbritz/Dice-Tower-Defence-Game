@@ -41,6 +41,8 @@ namespace UB
             Instantiate(WorldSaveGameManager.Instance.PlayerPrefab);
             await WorldSceneManager.Instance.TransitionToSceneAsync(1, true);
             // Show the first wave
+            WorldAIManager.Instance.SpawnCharacters(WorldAIManager.Instance.EnemyGroup1);
+            await RoutineBase.WaitForSeconds(5);
             // Open the in-game shop UI
             PlayerUIManager.Instance.OpenInGameShopMenu();
         }
