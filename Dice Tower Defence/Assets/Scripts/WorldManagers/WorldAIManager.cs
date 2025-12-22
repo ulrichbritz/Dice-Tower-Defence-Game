@@ -16,12 +16,6 @@ namespace UB
         [SerializeField] private bool useRandomSpawnPoints = true;
         [SerializeField] private float spawnPointGizmoSize = 1f;
 
-        [Header("Spawn Point Generation (Editor Only)")]
-        [SerializeField] private Transform[] spawnPlanes = new Transform[0];
-        [SerializeField] private int pointsPerPlane = 10;
-        [SerializeField] private float edgeBuffer = 2f;
-        [SerializeField] private float minDistanceBetweenPoints = 2f;
-
         protected override void Start()
         {
             base.Start();
@@ -61,6 +55,12 @@ namespace UB
 
         #region Spawn Point Generation (Editor Only)
         #if UNITY_EDITOR
+        [Header("Spawn Point Generation (Editor Only)")]
+        [SerializeField] private Transform[] spawnPlanes = new Transform[0];
+        [SerializeField] private int pointsPerPlane = 10;
+        [SerializeField] private float edgeBuffer = 2f;
+        [SerializeField] private float minDistanceBetweenPoints = 2f;
+
         /// <summary>
         /// Visualize spawn points in the Scene view
         /// </summary>
