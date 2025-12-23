@@ -1,6 +1,4 @@
 using UnityEngine;
-using UnityEngine.AI;
-using UnityEngine.TextCore.Text;
 
 namespace UB
 {

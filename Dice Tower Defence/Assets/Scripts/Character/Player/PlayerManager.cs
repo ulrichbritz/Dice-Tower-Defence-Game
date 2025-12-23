@@ -63,6 +63,14 @@ namespace UB
             // External References Cleanup and Unlink
             PlayerInputManager.Player = null;
             PlayerInputManager = null;
+            PlayerLocomotionManager = null;
+            PlayerAnimatorManager = null;
+            PlayerStatsManager = null;
+            PlayerEquipmentManager = null;
+            PlayerInventoryManager = null;
+            if (Instance == this) {
+                Instance = null;
+            }
         }
     }
 }

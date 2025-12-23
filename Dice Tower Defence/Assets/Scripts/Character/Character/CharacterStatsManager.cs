@@ -4,12 +4,10 @@ namespace UB
 {
     public abstract class CharacterStatsManager : MonoBehaviour
     {
-        public int Health;
-        public int MaxHealth;
-        public int Damage;
-        public float MovementSpeed;
-        public float Acceleration;
-        public float StoppingDistance;
+        [SerializeField] private CharacterStats BaseCharacterStats;
+        public CharacterStats CurrentCharacterStats { get; private set; }
+
+        public bool IsDead { get; private set; }
 
         protected virtual void Awake()
         {
@@ -18,12 +16,12 @@ namespace UB
 
         protected virtual void Start()
         {
-            
+            CurrentCharacterStats = Instantiate(BaseCharacterStats);
         }
 
         protected virtual void OnDestroy()
         {
-            
+            CurrentCharacterStats = null;
         }
     }
 }

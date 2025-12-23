@@ -53,7 +53,8 @@ namespace UB
 
             // Apply movement to character controller
             if (playerManager.CharacterController != null) {
-                playerManager.CharacterController.Move(moveDirection * playerManager.PlayerStatsManager.MovementSpeed * Time.deltaTime);
+                playerManager.CharacterController.Move(
+                    moveDirection * playerManager.PlayerStatsManager.CurrentCharacterStats.MovementSpeed * Time.deltaTime);
             }
         }
 

@@ -24,9 +24,9 @@ namespace UB
             AICharacterManager = GetComponent<AICharacterManager>();
 
             // Set NavMeshAgent speed based on CharacterStats
-            AICharacterManager.NavMeshAgent.speed = AICharacterManager.AIStatsManager.MovementSpeed;
-            //AICharacterManager.NavMeshAgent.acceleration = AICharacterManager.AIStatsManager.Acceleration;
-            AICharacterManager.NavMeshAgent.stoppingDistance = AICharacterManager.AIStatsManager.StoppingDistance;
+            AICharacterManager.NavMeshAgent.speed = AICharacterManager.AIStatsManager.CurrentCharacterStats.MovementSpeed;
+            //AICharacterManager.NavMeshAgent.acceleration = AICharacterManager.AIStatsManager.CurrentCharacterStats.Acceleration;
+            AICharacterManager.NavMeshAgent.stoppingDistance = AICharacterManager.AIStatsManager.CurrentCharacterStats.StoppingDistance;
         }
 
         protected override void Update()
