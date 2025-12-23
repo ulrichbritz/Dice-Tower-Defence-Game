@@ -10,32 +10,32 @@ namespace UB
     {
         [Header("Die Configuration")]
         [Tooltip("The die data containing face information")]
-        public Die dieData;
-        
+        public DieItem dieData;
+
         [Header("Dot Settings")]
         [Tooltip("Prefab for individual dots (leave empty for auto-generated)")]
         public GameObject dotPrefab;
-        
+
         [Tooltip("Size of each dot")]
         public float dotSize = 0.2f;
-        
+
         [Tooltip("Spacing between dots")]
         public float dotSpacing = 0.3f;
-        
+
         [Tooltip("Distance of dots from the die center")]
         public float dotDistance = 0.76f;
-        
+
         [Tooltip("Color of the dots")]
         public Color dotColor = Color.black;
-        
+
         [Header("Auto-Setup")]
         [Tooltip("Automatically create standard six-sided die face normals")]
         public bool autoSetupSixSidedDie = true;
-        
+
         // Internal references
         private List<List<GameObject>> faceDots = new List<List<GameObject>>();
         private Dictionary<int, List<GameObject>> faceDotMap = new Dictionary<int, List<GameObject>>();
-        
+
         // Standard cube face normals for six-sided die
         private readonly Vector3[] standardFaceNormals = new Vector3[]
         {
@@ -46,7 +46,7 @@ namespace UB
             Vector3.right,   // Right face
             Vector3.left     // Left face
         };
-        
+
         // Standard die dot patterns (relative positions on face)
         private readonly Dictionary<int, Vector2[]> dotPatterns = new Dictionary<int, Vector2[]>()
         {
@@ -57,12 +57,12 @@ namespace UB
             { 5, new Vector2[] { new Vector2(-0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(-0.5f, -0.5f), new Vector2(0.5f, -0.5f) } },
             { 6, new Vector2[] { new Vector2(-0.5f, 0.5f), new Vector2(-0.5f, 0f), new Vector2(-0.5f, -0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0f), new Vector2(0.5f, -0.5f) } }
         };
-        
+
         void Start()
         {
             SetupDieFaces();
         }
-        
+
         /// <summary>
         /// Initialize the die faces with display objects (dots or text)
         /// </summary>
@@ -72,19 +72,19 @@ namespace UB
                 Debug.LogError("DieRenderer: No die data assigned!");
                 return;
             }
-            
+
             // Clear existing display objects
             ClearFaceTexts();
-            
+
             // Auto-setup face normals for six-sided die if enabled
             if (autoSetupSixSidedDie && dieData.DieFaces != null && dieData.DieFaces.Length == 6) {
                 SetupStandardSixSidedDie();
             }
-            
+
             // Create display objects for each face
             CreateFaceTexts();
         }
-        
+
         /// <summary>
         /// Setup standard six-sided die with proper face normals
         /// </summary>
@@ -96,18 +96,18 @@ namespace UB
                 }
             }
         }
-        
+
         /// <summary>
         /// Create dot objects for each die face
         /// </summary>
         private void CreateFaceTexts()
         {
             if (dieData.DieFaces == null) return;
-            
+
             for (int i = 0; i < dieData.DieFaces.Length; i++) {
                 DieFace face = dieData.DieFaces[i];
                 if (face == null) continue;
-                
+
                 List<GameObject> dots = CreateFaceDots(face, i);
                 if (dots != null && dots.Count > 0) {
                     faceDots.Add(dots);
@@ -115,37 +115,37 @@ namespace UB
                 }
             }
         }
-        
+
         /// <summary>
         /// Create dot objects for a specific face with proper orientation
         /// </summary>
         private List<GameObject> CreateFaceDots(DieFace face, int faceIndex)
         {
             List<GameObject> dots = new List<GameObject>();
-            
+
             // Get the dot pattern for this face number
             if (!dotPatterns.ContainsKey(face.FaceNumber)) {
                 return dots;
             }
-            
+
             Vector2[] pattern = dotPatterns[face.FaceNumber];
-            
+
             // Create individual dots positioned and oriented for this face
             for (int i = 0; i < pattern.Length; i++) {
                 GameObject dot = CreateSingleDot(pattern[i], face);
                 dots.Add(dot);
             }
-            
+
             return dots;
         }
-        
+
         /// <summary>
         /// Create a single dot positioned flat against the specified face
         /// </summary>
         private GameObject CreateSingleDot(Vector2 localPosition, DieFace face)
         {
             GameObject dot;
-            
+
             // Use dot prefab if available, otherwise create a flat cylinder
             if (dotPrefab != null) {
                 dot = Instantiate(dotPrefab, transform);
@@ -154,34 +154,34 @@ namespace UB
                 // Create a flat cylinder for round dots
                 dot = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
                 dot.transform.SetParent(transform);
-                
+
                 // Remove collider as we don't need it for visual dots
                 Collider dotCollider = dot.GetComponent<Collider>();
                 if (dotCollider != null) {
                     Destroy(dotCollider);
                 }
             }
-            
+
             // Calculate the dot's position on the face
             Vector3 faceCenter = face.FaceNormal * dotDistance;
-            
+
             // Create local coordinate system for the face
             Vector3 rightVector, upVector;
             GetFaceCoordinateSystem(face.FaceNormal, out rightVector, out upVector);
-            
+
             // Position the dot on the face using the local coordinate system
-            Vector3 dotPosition = faceCenter + 
-                                  (rightVector * localPosition.x * dotSpacing) + 
+            Vector3 dotPosition = faceCenter +
+                                  (rightVector * localPosition.x * dotSpacing) +
                                   (upVector * localPosition.y * dotSpacing);
-            
+
             dot.transform.localPosition = dotPosition;
-            
+
             // Orient the dot to be flat against the face
             if (dotPrefab == null) {
                 // For cylinders, we need to align the Y-axis (height) with the face normal
                 // Use FromToRotation to rotate from Vector3.up to face normal
                 dot.transform.rotation = Quaternion.FromToRotation(Vector3.up, face.FaceNormal);
-                
+
                 // Make it flat and properly sized
                 dot.transform.localScale = new Vector3(dotSize, dotSize * 0.05f, dotSize);
             }
@@ -190,18 +190,18 @@ namespace UB
                 dot.transform.rotation = Quaternion.LookRotation(face.FaceNormal, upVector);
                 dot.transform.localScale = Vector3.one * dotSize;
             }
-            
+
             // Set color to match text color
             Renderer dotRenderer = dot.GetComponent<Renderer>();
             if (dotRenderer != null) {
                 dotRenderer.material.color = dotColor;
             }
-            
+
             dot.name = $"Face_{face.FaceNumber}_Dot_{localPosition.x}_{localPosition.y}";
-            
+
             return dot;
         }
-        
+
         /// <summary>
         /// Get the local coordinate system for a face (right and up vectors)
         /// </summary>
@@ -240,11 +240,11 @@ namespace UB
                 upVector = Vector3.Cross(faceNormal, rightVector).normalized;
             }
         }
-        
+
         /// <summary>
         /// Position text on the correct face of the die
         /// </summary>
-        
+
         /// <summary>
         /// Clear all existing dot objects
         /// </summary>
@@ -257,16 +257,16 @@ namespace UB
                         if (dot != null) {
                             if (Application.isPlaying) {
                                 Destroy(dot);
-                            } 
+                            }
                         }
                     }
                 }
             }
-            
+
             faceDots.Clear();
             faceDotMap.Clear();
         }
-        
+
         /// <summary>
         /// Change the dot color of all faces
         /// </summary>
@@ -286,7 +286,7 @@ namespace UB
                 }
             }
         }
-        
+
         // Editor validation
         void OnValidate()
         {
@@ -297,7 +297,7 @@ namespace UB
                 CreateFaceTexts();
             }
         }
-        
+
         // Context menu helpers for testing
         [ContextMenu("Refresh All Faces")]
         public void ContextRefreshFaces()
