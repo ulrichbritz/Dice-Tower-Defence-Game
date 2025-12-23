@@ -18,6 +18,8 @@ namespace UB
 
         [Header("Flags")]
         [HideInInspector] public bool IsPerformingAction;
+        [HideInInspector] public bool CanMove = true;
+        [HideInInspector] public bool CanRotate = true;
 
         // IsMoving with value change callback
         private bool _isMoving;

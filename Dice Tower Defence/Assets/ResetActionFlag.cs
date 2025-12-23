@@ -13,6 +13,8 @@ namespace UB
             }
 
             characterManager.IsPerformingAction = false;
+            characterManager.CanMove = true;
+            characterManager.CanRotate = true;
         }
 
         // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

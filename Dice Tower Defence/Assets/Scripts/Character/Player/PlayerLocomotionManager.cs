@@ -42,6 +42,10 @@ namespace UB
 
         public void HandleGroundedMovement()
         {
+            if (!playerManager.CanMove) {
+                return;
+            }
+
             // For top-down games, use world-space movement instead of camera-relative
             moveDirection = new Vector3(horizontalMovement, 0, verticalMovement);
             moveDirection = moveDirection.normalized;
@@ -58,6 +62,10 @@ namespace UB
         #region  Rotation
         private void HandleRotation()
         {
+            if (!playerManager.CanRotate) {
+                return;
+            }
+
             if (moveDirection == Vector3.zero) {
                 return;
             }
