@@ -1013,7 +1013,7 @@ MonoBehaviour:
   Damage: 0
   MovementSpeed: 0.5
   Acceleration: 0
-  StoppingDistance: 0
+  StoppingDistance: 1
 --- !u!114 &6506986113618528211
 MonoBehaviour:
   m_ObjectHideFlags: 0

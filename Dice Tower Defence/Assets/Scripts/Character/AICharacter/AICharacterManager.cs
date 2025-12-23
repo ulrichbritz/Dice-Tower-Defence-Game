@@ -79,6 +79,21 @@ namespace UB
             if (nextState != null) {
                 CurrentState = nextState;
             }
+
+            if (NavMeshAgent.enabled) {
+                Vector3 agentDestination = NavMeshAgent.destination;
+                float remainingDistance = NavMeshAgent.remainingDistance;
+
+                if (remainingDistance > NavMeshAgent.stoppingDistance) {
+                    IsMoving = true;
+                }
+                else {
+                    IsMoving = false;
+                }
+            }
+            else {
+                IsMoving = false;
+            }
         }
 
         public void AssignTarget()

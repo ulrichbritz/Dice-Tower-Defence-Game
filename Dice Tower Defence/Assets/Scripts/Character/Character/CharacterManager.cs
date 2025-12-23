@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.TextCore.Text;
 
 namespace UB
 {
@@ -18,6 +19,19 @@ namespace UB
         [Header("Flags")]
         [HideInInspector] public bool IsPerformingAction;
 
+        // IsMoving with value change callback
+        private bool _isMoving;
+        public bool IsMoving
+        {
+            get => _isMoving;
+            set {
+                if (_isMoving != value) {
+                    _isMoving = value;
+                    OnIsMovingChanged(value);
+                }
+            }
+        }
+
         protected virtual void Awake()
         {
 
@@ -34,6 +48,9 @@ namespace UB
 
             // Scripts
             CharacterStatsManager = GetComponent<CharacterStatsManager>();
+
+            // Initialize IsMoving
+            _isMoving = false;
         }
 
         protected virtual void Update()
@@ -49,6 +66,15 @@ namespace UB
         protected virtual void LateUpdate()
         {
 
+        }
+
+        /// <summary>
+        /// Called when IsMoving changes. Override in derived classes to handle movement state changes.
+        /// </summary>
+        /// <param name="isMoving">True if character started moving, false if stopped</param>
+        protected virtual void OnIsMovingChanged(bool isMoving)
+        {
+            Animator.SetBool("IsMoving", isMoving);
         }
 
         protected virtual void OnDestroy()

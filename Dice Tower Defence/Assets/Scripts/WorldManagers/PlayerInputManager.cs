@@ -60,7 +60,7 @@ namespace UB
         {
             if (playerControls == null) {
                 playerControls = new PlayerControls();
-                // Movement 
+                // Movement
                 playerControls.PlayerMovement.Movement.performed += ctx => movementInput = ctx.ReadValue<Vector2>();
 
                 // Player Actions
@@ -101,6 +101,13 @@ namespace UB
             }
             else if (moveAmount > 0.5f && moveAmount <= 1f) {
                 moveAmount = 1f;
+            }
+
+            if (moveAmount != 0) {
+                Player.IsMoving = true;
+            }
+            else {
+                Player.IsMoving = false;
             }
 
             Player.PlayerLocomotionManager.SetMovementInputs(verticalInput, horizontalInput, moveAmount);
