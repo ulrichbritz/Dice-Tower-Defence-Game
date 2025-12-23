@@ -36,6 +36,10 @@ namespace UB
                 
                 // Spawn the enemy
                 GameObject instantiatedCharacter = Instantiate(character, spawnPosition, Quaternion.identity);
+                
+                // Make enemy face the origin (0,0,0)
+                instantiatedCharacter.transform.LookAt(Vector3.zero);
+                
                 spawnedCharacters.Add(instantiatedCharacter);
                 
                 // Wait 0.5 seconds after spawning before moving to next spawn
@@ -69,7 +73,6 @@ namespace UB
                 return enemySpawnPoints[index];
             }
         }
-
 
         #region Spawn Point Generation (Editor Only)
         #if UNITY_EDITOR
