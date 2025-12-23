@@ -17,7 +17,8 @@ namespace UB
         private float horizontalInput;
         private float moveAmount;
 
-        //[Header("Player Actions")]
+        [Header("Player Actions")]
+        private bool dodgeInput;
 
         protected override void Awake()
         {
@@ -64,7 +65,7 @@ namespace UB
                 playerControls.PlayerMovement.Movement.performed += ctx => movementInput = ctx.ReadValue<Vector2>();
 
                 // Player Actions
-                //playerControls.PlayerActions.Roll.performed += ctx => dodgeInput = true;
+                playerControls.PlayerActions.Dodge.performed += ctx => dodgeInput = true;
             }
 
             playerControls.Enable();
@@ -86,6 +87,7 @@ namespace UB
             // Movement Input
             HandleMovementInput();
             // Player Actions
+            HandleDodgeInput();
         }
 
         private void HandleMovementInput()
@@ -112,6 +114,14 @@ namespace UB
 
             Player.PlayerLocomotionManager.SetMovementInputs(verticalInput, horizontalInput, moveAmount);
             Player.PlayerAnimatorManager.UpdateAnimatorMovementParameters(0, moveAmount);
+        }
+
+        private void HandleDodgeInput()
+        {
+            if (dodgeInput) {
+                dodgeInput = false;
+                Player.PlayerLocomotionManager.AttemptToPerformDodge();
+            }
         }
 
         private void OnApplicationFocus(bool focus)

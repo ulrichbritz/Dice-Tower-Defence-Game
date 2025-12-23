@@ -31,6 +31,15 @@ namespace UB
             HandleRotation();
         }
 
+        #region  Movement
+
+        public void SetMovementInputs(float vertical, float horizontal, float moveAmt)
+        {
+            verticalMovement = vertical;
+            horizontalMovement = horizontal;
+            moveAmount = moveAmt;
+        }
+
         public void HandleGroundedMovement()
         {
             // For top-down games, use world-space movement instead of camera-relative
@@ -44,18 +53,14 @@ namespace UB
             }
         }
 
-        public void SetMovementInputs(float vertical, float horizontal, float moveAmt)
-        {
-            verticalMovement = vertical;
-            horizontalMovement = horizontal;
-            moveAmount = moveAmt;
-        }
+        #endregion
 
+        #region  Rotation
         private void HandleRotation()
         {
             if (moveDirection == Vector3.zero) {
                 return;
-            } 
+            }
 
             // Rotate the player to face movement direction
             Vector3 targetDirection = moveDirection;
@@ -64,11 +69,21 @@ namespace UB
             if (targetDirection != Vector3.zero) {
                 Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
                 playerManager.transform.rotation = Quaternion.Slerp(
-                    playerManager.transform.rotation, 
-                    targetRotation, 
+                    playerManager.transform.rotation,
+                    targetRotation,
                     Time.deltaTime * 10f); // Rotation speed
             }
         }
+        #endregion
+
+        #region Player Locomotion Actions
+
+        public void AttemptToPerformDodge()
+        {
+            // TODO implement dodge
+        }
+
+        #endregion
 
         protected override void OnDestroy()
         {
