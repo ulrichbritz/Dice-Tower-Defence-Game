@@ -600,6 +600,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2840660347000935092, guid: 29d54d45e5a8f3945b21fc67ccf86aa3, type: 3}
+      propertyPath: field of view
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 4615350357178102256, guid: 29d54d45e5a8f3945b21fc67ccf86aa3, type: 3}
+      propertyPath: focusOffset.y
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4615350357178102256, guid: 29d54d45e5a8f3945b21fc67ccf86aa3, type: 3}
+      propertyPath: focusOffset.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4615350357178102256, guid: 29d54d45e5a8f3945b21fc67ccf86aa3, type: 3}
+      propertyPath: focusOrthoSize
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 4615350357178102256, guid: 29d54d45e5a8f3945b21fc67ccf86aa3, type: 3}
+      propertyPath: focusFieldOfView
+      value: 65
+      objectReference: {fileID: 0}
+    - target: {fileID: 4625200340225287104, guid: 29d54d45e5a8f3945b21fc67ccf86aa3, type: 3}
+      propertyPath: Lens.FieldOfView
+      value: 60
+      objectReference: {fileID: 0}
     - target: {fileID: 5466926127584053610, guid: 29d54d45e5a8f3945b21fc67ccf86aa3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

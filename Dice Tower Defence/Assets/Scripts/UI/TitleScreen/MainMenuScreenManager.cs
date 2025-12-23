@@ -41,8 +41,11 @@ namespace UB
             Instantiate(WorldSaveGameManager.Instance.PlayerPrefab);
             await WorldSceneManager.Instance.TransitionToSceneAsync(1, true);
             // Show the first wave
-            WorldAIManager.Instance.SpawnCharacters(WorldAIManager.Instance.Zombies);
-            await RoutineBase.WaitForSeconds(5);
+            await WorldAIManager.Instance.SpawnCharacters(WorldAIManager.Instance.Zombies);
+
+            // Wait a few seconds before opening the shop
+            await RoutineBase.WaitForSeconds(3f);
+            
             // Open the in-game shop UI
             PlayerUIManager.Instance.OpenInGameShopMenu();
         }

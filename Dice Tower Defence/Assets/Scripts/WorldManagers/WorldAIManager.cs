@@ -21,12 +21,30 @@ namespace UB
             base.Start();
         }
 
-        public void SpawnCharacters(GameObject[] groupToSpawn)
+        public async Routine SpawnCharacters(GameObject[] groupToSpawn)
         {
-            foreach (var character in groupToSpawn) {
+            for (int i = 0; i < groupToSpawn.Length; i++) {
+                var character = groupToSpawn[i];
                 Vector3 spawnPosition = GetSpawnPosition();
+                
+                // Move camera to spawn position (without returning to normal)
+                if (PlayerCameraManager.Instance != null) {
+                    PlayerCameraManager.Instance.MoveToPosition(spawnPosition);
+                    // Wait for camera to move to position
+                    await RoutineBase.WaitForSeconds(0.5f);
+                }
+                
+                // Spawn the enemy
                 GameObject instantiatedCharacter = Instantiate(character, spawnPosition, Quaternion.identity);
                 spawnedCharacters.Add(instantiatedCharacter);
+                
+                // Wait 0.5 seconds after spawning before moving to next spawn
+                await RoutineBase.WaitForSeconds(0.5f);
+            }
+            
+            // After all enemies spawned, return camera to normal position
+            if (PlayerCameraManager.Instance != null) {
+                PlayerCameraManager.Instance.ReturnToNormalPosition();
             }
         }
 

@@ -43,10 +43,6 @@ namespace UB
         {
             if (inGameShopUI != null) {
                 inGameShopUI.SetActive(false);
-                Debug.Log("Shop UI closed");
-            }
-            else {
-                Debug.LogWarning("InGameShopUI is not assigned!");
             }
         }
 

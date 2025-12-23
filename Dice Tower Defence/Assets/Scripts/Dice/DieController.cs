@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using AsyncRoutines;
 
 namespace UB
 {
@@ -113,13 +114,13 @@ namespace UB
             if (isRolling || dieData?.DieFaces == null || faceIndex < 0 || faceIndex >= dieData.DieFaces.Length)
                 return;
             
-            StartCoroutine(RollAnimation(faceIndex));
+            WorldRoutineManager.Instance.Run(RollAnimation(faceIndex));
         }
         
         /// <summary>
         /// Animate the die rolling to the target face with bounce
         /// </summary>
-        private IEnumerator RollAnimation(int targetFaceIndex)
+        private async Routine RollAnimation(int targetFaceIndex)
         {
             isRolling = true;
             
@@ -160,7 +161,7 @@ namespace UB
                 Vector3 currentPosition = startPosition + Vector3.up * bounceOffset;
                 transform.position = currentPosition;
                 
-                yield return null;
+                await RoutineBase.WaitForNextFrame();
             }
             
             // Ensure exact final rotation and position
