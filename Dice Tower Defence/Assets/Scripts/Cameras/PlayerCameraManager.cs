@@ -60,6 +60,7 @@ namespace UB
             CinemachineCamera.Lens = lens;
         }
 
+        #region Camera Animations
         /// <summary>
         /// Zoom out briefly to show enemy spawns, then zoom back in
         /// </summary>
@@ -100,6 +101,7 @@ namespace UB
             
             WorldRoutineManager.Instance.Run(FocusPositionRoutine(position, duration));
         }
+
         /// <summary>
         /// Move camera to a specific position without returning (for spawn sequences)
         /// </summary>
@@ -123,11 +125,6 @@ namespace UB
             }
             
             WorldRoutineManager.Instance.Run(ReturnToNormalRoutine());
-        }
-        [ContextMenu("Test Zoom Animation")]
-        private void TestZoomAnimation()
-        {
-            ZoomOutForSpawn(3f);
         }
 
         private async Routine ZoomOutRoutine(float duration)
@@ -433,6 +430,19 @@ namespace UB
                 finalLens.FieldOfView = normalFieldOfView;
             }
             CinemachineCamera.Lens = finalLens;
+        }
+        #endregion
+
+        private void OnDestroy()
+        {
+            // Clean up singleton instance
+            if (Instance == this) {
+                Instance = null;
+            }
+            
+            // Reset animation flags
+            isZooming = false;
+            isFocusing = false;
         }
     }
 }

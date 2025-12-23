@@ -4,6 +4,8 @@ namespace UB
 {
     public class PlayerManager : CharacterManager
     {
+        public static PlayerManager Instance { get; private set; }
+
         [Header("Internal References")]
         [HideInInspector] public PlayerLocomotionManager PlayerLocomotionManager { get; private set; }
         [HideInInspector] public PlayerAnimatorManager PlayerAnimatorManager { get; private set; }
@@ -14,6 +16,13 @@ namespace UB
         protected override void Awake()
         {
             base.Awake();
+
+            if (Instance == null) {
+                Instance = this;
+            }
+            else {
+                Destroy(this.gameObject);
+            }
         }
 
         protected override void Start()

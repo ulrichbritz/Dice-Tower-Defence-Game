@@ -26,30 +26,40 @@ namespace UB
             for (int i = 0; i < groupToSpawn.Length; i++) {
                 var character = groupToSpawn[i];
                 Vector3 spawnPosition = GetSpawnPosition();
-                
+
                 // Move camera to spawn position (without returning to normal)
                 if (PlayerCameraManager.Instance != null) {
                     PlayerCameraManager.Instance.MoveToPosition(spawnPosition);
                     // Wait for camera to move to position
                     await RoutineBase.WaitForSeconds(0.5f);
                 }
-                
+
                 // Spawn the enemy
                 GameObject instantiatedCharacter = Instantiate(character, spawnPosition, Quaternion.identity);
-                
+
                 // Make enemy face the origin (0,0,0)
                 instantiatedCharacter.transform.LookAt(Vector3.zero);
-                
+
                 spawnedCharacters.Add(instantiatedCharacter);
-                
+
                 // Wait 0.5 seconds after spawning before moving to next spawn
                 await RoutineBase.WaitForSeconds(0.5f);
             }
-            
+
             // After all enemies spawned, return camera to normal position
             if (PlayerCameraManager.Instance != null) {
                 PlayerCameraManager.Instance.ReturnToNormalPosition();
             }
+        }
+
+        public void DespawnAllCharacters()
+        {
+            foreach (var character in spawnedCharacters) {
+                if (character != null) {
+                    Destroy(character);
+                }
+            }
+            spawnedCharacters.Clear();
         }
 
         /// <summary>
@@ -74,6 +84,14 @@ namespace UB
             }
         }
 
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            // Clean up spawned characters
+            DespawnAllCharacters();
+        }
+
         #region Spawn Point Generation (Editor Only)
         #if UNITY_EDITOR
         [Header("Spawn Point Generation (Editor Only)")]
@@ -92,11 +110,11 @@ namespace UB
                     // Draw spawn point
                     Gizmos.color = Color.red;
                     Gizmos.DrawWireSphere(enemySpawnPoints[i], spawnPointGizmoSize);
-                    
+
                     // Draw spawn point number
                     Gizmos.color = Color.white;
                     Gizmos.DrawWireCube(enemySpawnPoints[i] + Vector3.up * spawnPointGizmoSize, Vector3.one * 0.1f);
-                    
+
                     #if UNITY_EDITOR
                     // Draw index number in scene view
                     UnityEditor.Handles.Label(enemySpawnPoints[i] + Vector3.up * (spawnPointGizmoSize + 0.5f), i.ToString());
@@ -127,7 +145,7 @@ namespace UB
 
                 // Get the plane's bounds (works with MeshRenderer, Collider, etc.)
                 Bounds planeBounds = GetObjectBounds(plane);
-                
+
                 if (planeBounds.size == Vector3.zero) {
                     Debug.LogWarning($"Could not get bounds for plane: {plane.name}");
                     continue;
@@ -136,10 +154,10 @@ namespace UB
                 // Generate random points on this plane, avoiding edges and other spawn points
                 int attempts = 0;
                 int maxAttempts = pointsPerPlane * 10; // Prevent infinite loops
-                
+
                 for (int i = 0; i < pointsPerPlane && attempts < maxAttempts; attempts++) {
                     Vector3 candidatePoint = GenerateRandomPointOnPlane(planeBounds, planeTransform);
-                    
+
                     // Check if this point is far enough from existing spawn points
                     if (IsValidSpawnPoint(candidatePoint)) {
                         enemySpawnPoints.Add(candidatePoint);
@@ -149,7 +167,7 @@ namespace UB
             }
 
             Debug.Log($"Generated {enemySpawnPoints.Count} spawn points from {spawnPlanes.Length} planes.");
-            
+
             // Mark the scene as dirty so changes are saved
             UnityEditor.EditorUtility.SetDirty(this);
         }
@@ -175,7 +193,7 @@ namespace UB
             // Calculate the usable area (avoiding edges)
             Vector3 min = planeBounds.min;
             Vector3 max = planeBounds.max;
-            
+
             // Apply edge buffer
             min.x += edgeBuffer;
             min.z += edgeBuffer;

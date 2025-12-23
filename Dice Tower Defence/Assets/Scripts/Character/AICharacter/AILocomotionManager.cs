@@ -4,10 +4,10 @@ using UnityEngine;
 namespace UB
 {
 
-    public class EnemyLocomotionManager : CharacterLocomotionManager
+    public class AILocomotionManager : CharacterLocomotionManager
     {
         [Header("Components")]
-        [HideInInspector] public EnemyManager EnemyManager;
+        [HideInInspector] public AICharacterManager AICharacterManager;
 
         [Header("Movement Settings")]
         private Transform BarricadeTarget;
@@ -21,12 +21,12 @@ namespace UB
         {
             base.Start();
 
-            EnemyManager = GetComponent<EnemyManager>();
+            AICharacterManager = GetComponent<AICharacterManager>();
 
             // Set NavMeshAgent speed based on CharacterStats
-            EnemyManager.NavMeshAgent.speed = EnemyManager.EnemyStatsManager.MovementSpeed;
-            EnemyManager.NavMeshAgent.acceleration = EnemyManager.EnemyStatsManager.Acceleration;
-            EnemyManager.NavMeshAgent.stoppingDistance = EnemyManager.EnemyStatsManager.StoppingDistance;
+            AICharacterManager.NavMeshAgent.speed = AICharacterManager.AIStatsManager.MovementSpeed;
+            //AICharacterManager.NavMeshAgent.acceleration = AICharacterManager.AIStatsManager.Acceleration;
+            AICharacterManager.NavMeshAgent.stoppingDistance = AICharacterManager.AIStatsManager.StoppingDistance;
         }
 
         protected override void Update()
@@ -53,7 +53,7 @@ namespace UB
         {
             base.OnDestroy();
 
-            EnemyManager = null;
+            AICharacterManager = null;
             BarricadeTarget = null;
         }
     }

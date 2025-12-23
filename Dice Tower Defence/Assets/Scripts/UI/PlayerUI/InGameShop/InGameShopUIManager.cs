@@ -14,14 +14,14 @@ namespace UB
         private void Start()
         {
             playerUIManager = PlayerUIManager.Instance;
-            
+
             nextWaveButton.onClick.AddListener(NextWaveButtonClicked);
         }
 
         private void NextWaveButtonClicked()
         {
             playerUIManager.CloseInGameShopMenu();
-            //WorldWaveManager.Instance.StartNextWave();
+            GameManager.Instance.StartNextWave();
         }
 
         private void OnDestroy()
