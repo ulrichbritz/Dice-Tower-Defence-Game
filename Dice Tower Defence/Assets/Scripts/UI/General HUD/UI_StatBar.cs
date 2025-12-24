@@ -5,7 +5,7 @@ namespace UB.UI
 {
     public class UI_StatBar : MonoBehaviour
     {
-        private Slider slider;
+        protected Slider slider;
 
         // todo Secondary bar to show recent gains/losses
 

@@ -35,7 +35,7 @@ namespace UB
         /// </summary>
         /// <param name="oldHealth">The previous health value</param>
         /// <param name="newHealth">The new health value</param>
-        private void OnHealthChanged(int oldHealth, int newHealth)
+        protected virtual void OnHealthChanged(int oldHealth, int newHealth)
         {
             // Update WorldSpaceHUD if it exists
             if (characterManager.WorldSpaceHUDManager != null) {

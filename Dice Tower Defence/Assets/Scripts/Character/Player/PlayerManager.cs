@@ -48,6 +48,7 @@ namespace UB
 
             // TODO move this when we add saving and loading
             WorldSpaceHUDManager.SetMaxHealthValue(PlayerStatsManager.CurrentCharacterStats.MaxHealth);
+            PlayerUIManager.Instance.PlayerUIHudManager.SetMaxHealthValue(PlayerStatsManager.CurrentCharacterStats.MaxHealth);
             PlayerStatsManager.CurrentCharacterStats.CurrentHealth = PlayerStatsManager.CurrentCharacterStats.MaxHealth;
         }
 

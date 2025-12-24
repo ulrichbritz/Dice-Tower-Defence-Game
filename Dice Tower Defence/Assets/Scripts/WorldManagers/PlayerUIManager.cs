@@ -8,15 +8,19 @@ namespace UB
     /// </summary>
     public class PlayerUIManager : WorldManager<PlayerUIManager>
     {
+        [Header("Player UI HUD Manager")]
+        [HideInInspector] public PlayerUIHudManager PlayerUIHudManager { get; set; }
+        [SerializeField] private GameObject playerUIHud;
+
         [Header("In Game Shop UI")]
-        [HideInInspector]
-        public InGameShopUIManager InGameShopUIManager { get; set; }
+        [HideInInspector] public InGameShopUIManager InGameShopUIManager { get; set; }
         [SerializeField] private GameObject inGameShopUI;
 
         protected override void Awake()
         {
             base.Awake();
 
+            PlayerUIHudManager = GetComponentInChildren<PlayerUIHudManager>();
             InGameShopUIManager = GetComponentInChildren<InGameShopUIManager>();
         }
 
