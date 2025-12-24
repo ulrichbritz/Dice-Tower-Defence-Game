@@ -25,13 +25,6 @@ namespace UB
             else {
                 Destroy(this.gameObject);
             }
-        }
-
-        protected override void Start()
-        {
-            base.Start();
-
-            DontDestroyOnLoad(this.gameObject);
 
             // Internal References Initialization
             PlayerLocomotionManager = GetComponent<PlayerLocomotionManager>();
@@ -45,6 +38,17 @@ namespace UB
 
             // Link To Reference's
             PlayerInputManager.Player = this;
+        }
+
+        protected override void Start()
+        {
+            base.Start();
+
+            DontDestroyOnLoad(this.gameObject);
+
+            // TODO move this when we add saving and loading
+            WorldSpaceHUDManager.SetMaxHealthValue(PlayerStatsManager.CurrentCharacterStats.MaxHealth);
+            PlayerStatsManager.CurrentCharacterStats.CurrentHealth = PlayerStatsManager.CurrentCharacterStats.MaxHealth;
         }
 
         protected override void Update()

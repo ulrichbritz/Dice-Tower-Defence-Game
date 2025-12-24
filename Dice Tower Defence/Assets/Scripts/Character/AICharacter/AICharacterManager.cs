@@ -28,11 +28,6 @@ namespace UB
         protected override void Awake()
         {
             base.Awake();
-        }
-
-        protected override void Start()
-        {
-            base.Start();
 
             // Internal Component Scripts
             AILocomotionManager = GetComponent<AILocomotionManager>();
@@ -40,6 +35,15 @@ namespace UB
 
             // Internal Components
             NavMeshAgent = GetComponentInChildren<NavMeshAgent>();
+        }
+
+        protected override void Start()
+        {
+            base.Start();
+
+            // TODO figure out if we are going to keep this here with saving and loading
+            WorldSpaceHUDManager.SetMaxHealthValue(AIStatsManager.CurrentCharacterStats.MaxHealth);
+            AIStatsManager.CurrentCharacterStats.CurrentHealth = AIStatsManager.CurrentCharacterStats.MaxHealth;
 
             // Ensure the character is properly placed on the NavMesh
             if (NavMesh.SamplePosition(transform.position, out NavMeshHit hit, 5f, NavMesh.AllAreas)) {
@@ -49,7 +53,8 @@ namespace UB
 
                 // Re-enable the agent and ensure it's properly initialized
                 NavMeshAgent.enabled = true;
-            } else {
+            }
+            else {
                 Debug.LogError($"Could not find NavMesh position near {transform.position}");
             }
 

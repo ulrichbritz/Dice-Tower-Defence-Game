@@ -13,7 +13,7 @@ namespace UB
 
         private void CalculcateHealthDamage(CharacterManager character)
         {
-            character.CharacterStatsManager.CurrentCharacterStats.CurrentHealth -= HealthDamage;
+            character.CharacterStatsManager.CurrentCharacterStats.CurrentHealth -= Mathf.RoundToInt(HealthDamage);
         }
     }
 }

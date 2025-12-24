@@ -1,3 +1,4 @@
+using UB.UI;
 using UnityEngine;
 
 namespace UB
@@ -13,6 +14,7 @@ namespace UB
 
         //Scripts
         [HideInInspector] public CharacterStatsManager CharacterStatsManager { get; private set; }
+        [HideInInspector] public WorldSpaceHUDManager WorldSpaceHUDManager { get; private set; }
 
         [Header("Flags")]
         [HideInInspector] public bool IsPerformingAction;
@@ -34,11 +36,6 @@ namespace UB
 
         protected virtual void Awake()
         {
-
-        }
-
-        protected virtual void Start()
-        {
             // Internal References Initialization
             // Components
             Animator = GetComponent<Animator>();
@@ -48,7 +45,11 @@ namespace UB
 
             // Scripts
             CharacterStatsManager = GetComponent<CharacterStatsManager>();
+            WorldSpaceHUDManager = GetComponentInChildren<WorldSpaceHUDManager>();
+        }
 
+        protected virtual void Start()
+        {
             // Initialize IsMoving
             _isMoving = false;
         }
