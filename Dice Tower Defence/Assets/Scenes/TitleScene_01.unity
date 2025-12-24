@@ -600,6 +600,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4615350357178102256, guid: 29d54d45e5a8f3945b21fc67ccf86aa3, type: 3}
+      propertyPath: focusOffset.y
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 5466926127584053610, guid: 29d54d45e5a8f3945b21fc67ccf86aa3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
