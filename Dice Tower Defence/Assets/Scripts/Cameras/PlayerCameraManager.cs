@@ -28,8 +28,7 @@ namespace UB
         [SerializeField] private Vector3 focusOffset = new Vector3(0f, 8f, -5f); // Camera offset from target
 
         private Vector3 originalCameraPosition;
-        private bool isZooming = false;
-        private bool isFocusing = false;
+        private bool isAnimating = false;
 
         private void Awake()
         {
@@ -69,7 +68,7 @@ namespace UB
         /// <param name="duration">How long to stay zoomed out in seconds</param>
         public async void ZoomOutForSpawn(float duration = 3f)
         {
-            if (CinemachineCamera == null || isZooming) {
+            if (CinemachineCamera == null || isAnimating) {
                 return;
             }
 
@@ -83,7 +82,7 @@ namespace UB
         /// <param name="duration">How long to focus on the enemy in seconds</param>
         public void FocusSpawn(Transform enemyTransform, float duration = 2f)
         {
-            if (CinemachineCamera == null || isFocusing || enemyTransform == null) {
+            if (CinemachineCamera == null || isAnimating || enemyTransform == null) {
                 return;
             }
 
@@ -97,7 +96,7 @@ namespace UB
         /// <param name="duration">How long to focus on the position in seconds</param>
         public void FocusPosition(Vector3 position, float duration = 2f)
         {
-            if (CinemachineCamera == null || isFocusing) {
+            if (CinemachineCamera == null || isAnimating) {
                 return;
             }
 
@@ -131,7 +130,7 @@ namespace UB
 
         private async Routine ZoomOutRoutine(float duration)
         {
-            isZooming = true;
+            isAnimating = true;
 
             // Zoom out phase
             if (PlayerCamera.orthographic) {
@@ -152,7 +151,7 @@ namespace UB
                 await AnimateFieldOfView(zoomedFieldOfView, normalFieldOfView);
             }
 
-            isZooming = false;
+            isAnimating = false;
         }
 
         private async Routine AnimateFieldOfView(float fromFOV, float toFOV)
@@ -199,7 +198,7 @@ namespace UB
 
         private async Routine FocusSpawnRoutine(Transform enemyTransform, float duration)
         {
-            isFocusing = true;
+            isAnimating = true;
 
             // Store current values
             Vector3 startPosition = CinemachineCamera.transform.position;
@@ -275,12 +274,12 @@ namespace UB
             }
             CinemachineCamera.Lens = finalLens;
 
-            isFocusing = false;
+            isAnimating = false;
         }
 
         private async Routine FocusPositionRoutine(Vector3 targetPosition, float duration)
         {
-            isFocusing = true;
+            isAnimating = true;
 
             // Store current values
             Vector3 startPosition = CinemachineCamera.transform.position;
@@ -356,7 +355,7 @@ namespace UB
             }
             CinemachineCamera.Lens = finalLens;
 
-            isFocusing = false;
+            isAnimating = false;
         }
 
         private async Routine MoveToPositionRoutine(Vector3 targetPosition)
@@ -442,9 +441,8 @@ namespace UB
                 Instance = null;
             }
 
-            // Reset animation flags
-            isZooming = false;
-            isFocusing = false;
+            // Reset animation flag
+            isAnimating = false;
         }
     }
 }
