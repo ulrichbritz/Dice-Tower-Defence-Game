@@ -842,6 +842,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3111171402939733931, guid: e628c839bb193424ea93dd657a4b3247, type: 3}
+      propertyPath: TakeHealthDamageInstantEffect
+      value: 
+      objectReference: {fileID: 11400000, guid: 0fad8b113ed33f44a83ff4d3a6004258, type: 2}
     - target: {fileID: 7713861738017162619, guid: e628c839bb193424ea93dd657a4b3247, type: 3}
       propertyPath: m_Name
       value: World Character Effects Manager

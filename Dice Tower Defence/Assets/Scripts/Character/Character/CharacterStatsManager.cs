@@ -37,11 +37,29 @@ namespace UB
         /// <param name="newHealth">The new health value</param>
         protected virtual void OnHealthChanged(int oldHealth, int newHealth)
         {
+            if (CurrentCharacterStats.CurrentHealth > CurrentCharacterStats.MaxHealth) {
+                CurrentCharacterStats.CurrentHealth = CurrentCharacterStats.MaxHealth;
+            }
+
             // Update WorldSpaceHUD if it exists
             if (characterManager.WorldSpaceHUDManager != null) {
                 characterManager.WorldSpaceHUDManager.SetNewHealthValue(oldHealth, newHealth);
             }
+
+            if (CurrentCharacterStats.CurrentHealth <= 0 && !IsDead) {
+                TriggerDeathEvent();
+            }
         }
+
+        protected virtual void TriggerDeathEvent()
+        {
+            CurrentCharacterStats.CurrentHealth = 0;
+            IsDead = true;
+
+            WorldRoutineManager.Instance.Run(characterManager.ProcessDeathEvent());
+        }
+
+        //protected virtual void De
 
         protected virtual void OnDestroy()
         {

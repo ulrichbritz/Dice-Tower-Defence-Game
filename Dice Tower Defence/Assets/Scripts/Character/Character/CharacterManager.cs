@@ -1,3 +1,4 @@
+using AsyncRoutines;
 using UB.UI;
 using UnityEngine;
 
@@ -14,6 +15,8 @@ namespace UB
 
         //Scripts
         [HideInInspector] public CharacterStatsManager CharacterStatsManager { get; private set; }
+        [HideInInspector] public CharacterEffectsManager CharacterEffectsManager { get; private set; }
+        [HideInInspector] public CharacterAnimatorManager CharacterAnimatorManager { get; private set; }
         [HideInInspector] public WorldSpaceHUDManager WorldSpaceHUDManager { get; private set; }
 
         [Header("Flags")]
@@ -45,6 +48,8 @@ namespace UB
 
             // Scripts
             CharacterStatsManager = GetComponent<CharacterStatsManager>();
+            CharacterEffectsManager = GetComponent<CharacterEffectsManager>();
+            CharacterAnimatorManager = GetComponent<CharacterAnimatorManager>();
             WorldSpaceHUDManager = GetComponentInChildren<WorldSpaceHUDManager>();
         }
 
@@ -67,6 +72,26 @@ namespace UB
         protected virtual void LateUpdate()
         {
 
+        }
+
+        public virtual async Routine ProcessDeathEvent(bool manuallySelectDeathAnimation = false)
+        {
+            // todo reset flags that need to be reset
+
+            // todo depending on weapon type, play different death animation
+            if (!manuallySelectDeathAnimation) {
+                CharacterAnimatorManager.PlayTargetActionAnimation("Death_F_1H", true, true, false, false);
+            }
+
+            // todo play death sfx
+
+            await RoutineBase.WaitForSeconds(5f);
+
+            // todo check for potential repawn modifiers or something
+
+            // todo maybe xp or something, or update stats
+
+            // todo Disable Character Model
         }
 
         /// <summary>

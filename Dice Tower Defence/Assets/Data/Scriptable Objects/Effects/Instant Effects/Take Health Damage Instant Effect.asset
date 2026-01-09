@@ -13,4 +13,14 @@ MonoBehaviour:
   m_Name: Take Health Damage Instant Effect
   m_EditorClassIdentifier: 
   InstantEffectID: 0
-  HealthDamage: 3
+  CharacterCausingDamage: {fileID: 0}
+  physicalDamage: 3
+  PoiseDamage: 0
+  PoiseIsBroken: 0
+  playDamageAnimation: 1
+  ManuallySelectDamageAnimation: 0
+  DamageAnimation: 
+  WillPlaySoundEffect: 1
+  ElementalDamageSoundFX: {fileID: 0}
+  AngleHitFrom: 0
+  ContactPoint: {x: 0, y: 0, z: 0}
