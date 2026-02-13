@@ -85,9 +85,9 @@ namespace UB
             }
 
             // Movement Input
-            HandleMovementInput();
+            //HandleMovementInput();
             // Player Actions
-            HandleDodgeInput();
+            //HandleDodgeInput();
         }
 
         private void HandleMovementInput()
