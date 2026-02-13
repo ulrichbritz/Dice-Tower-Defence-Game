@@ -17,14 +17,14 @@ MonoBehaviour:
   ItemDescription: A simple handgun.
   ItemID: 0
   WeaponModel: {fileID: 1504159519946743619, guid: 39ba7eddf0e682141a1b55bfba04ee04, type: 3}
-  BasePhysicalDamage: 0
+  BasePhysicalDamage: 1
   BaseAttackSpeed: 1
   BaseCriticalChance: 0
   BaseCriticalDamageModifier: 50
   BaseMovementSpeedWithWeapon: 5
   BaseEvasionChanceWithWeapon: 0
   BaseAttackRange: 2
-  CurrentPhysicalDamage: 0
+  CurrentPhysicalDamage: 1
   CurrentAttackSpeed: 1
   CurrentCriticalChance: 0
   CurrentMovementSpeedWithWeapon: 5

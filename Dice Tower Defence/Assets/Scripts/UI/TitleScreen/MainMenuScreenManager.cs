@@ -28,7 +28,7 @@ namespace UB
 
         private void OnLoadGameButtonClicked()
         {
-            
+
         }
 
         private void OnQuitButtonClicked()
@@ -38,16 +38,7 @@ namespace UB
 
         private async Routine StartNewGame()
         {
-            Instantiate(WorldSaveGameManager.Instance.PlayerPrefab);
-            await WorldSceneManager.Instance.TransitionToSceneAsync(1, true);
-            // Show the first wave
-            await WorldAIManager.Instance.SpawnCharacters(WorldAIManager.Instance.Zombies);
-
-            // Wait a few seconds before opening the shop
-            await RoutineBase.WaitForSeconds(3f);
-            
-            // Open the in-game shop UI
-            PlayerUIManager.Instance.OpenInGameShopMenu();
+            await GameManager.Instance.StartRun();
         }
 
         private void OnDestroy()

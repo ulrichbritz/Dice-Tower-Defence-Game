@@ -23,6 +23,7 @@ namespace UB
 
         public async Routine SpawnCharacters(GameObject[] groupToSpawn)
         {
+            /*
             for (int i = 0; i < groupToSpawn.Length; i++) {
                 var character = groupToSpawn[i];
                 Vector3 spawnPosition = GetSpawnPosition();
@@ -49,6 +50,27 @@ namespace UB
             // After all enemies spawned, return camera to normal position
             if (PlayerCameraManager.Instance != null) {
                 PlayerCameraManager.Instance.ReturnToNormalPosition();
+            }
+            */
+
+            // New implementation: spawn all enemies at once without camera movement
+            for (int i = 0; i < groupToSpawn.Length; i++) {
+                var character = groupToSpawn[i];
+                Vector3 spawnPosition = GetSpawnPosition();
+
+                // Spawn the enemy
+                GameObject instantiatedCharacter = Instantiate(character, spawnPosition, Quaternion.identity);
+
+                // Make enemy face the origin (0,0,0)
+                instantiatedCharacter.transform.LookAt(Vector3.zero);
+
+                spawnedCharacters.Add(instantiatedCharacter);
+
+                // Assign player as target
+                AICharacterManager aiCharacter = instantiatedCharacter.GetComponent<AICharacterManager>();
+                if (aiCharacter != null) {
+                    aiCharacter.AssignTarget();
+                }
             }
         }
 
