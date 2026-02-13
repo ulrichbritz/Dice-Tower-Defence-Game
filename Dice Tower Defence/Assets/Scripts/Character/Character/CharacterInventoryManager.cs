@@ -4,6 +4,9 @@ namespace UB
 {
     public class CharacterInventoryManager : MonoBehaviour
     {
+        public WeaponItem CurrentRightHandWeapon;   // Will be the main weapon that we base the stats off etc
+        public WeaponItem CurrentLeftHandWeapon;
+
         protected virtual void Awake()
         {
         }

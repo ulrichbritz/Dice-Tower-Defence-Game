@@ -12,6 +12,7 @@ namespace UB
         [HideInInspector] public PlayerStatsManager PlayerStatsManager { get; private set; }
         [HideInInspector] public PlayerEquipmentManager PlayerEquipmentManager { get; private set; }
         [HideInInspector] public PlayerInventoryManager PlayerInventoryManager { get; private set; }
+        [HideInInspector] public PlayerCombatManager PlayerCombatManager { get; private set; }
 
         [Header("External References")]
         [HideInInspector] public PlayerInputManager PlayerInputManager { get; private set; }
@@ -32,7 +33,7 @@ namespace UB
             PlayerStatsManager = GetComponent<PlayerStatsManager>();
             PlayerEquipmentManager = GetComponent<PlayerEquipmentManager>();
             PlayerInventoryManager = GetComponent<PlayerInventoryManager>();
-
+            PlayerCombatManager = GetComponent<PlayerCombatManager>();
             // External References Initialization
             PlayerInputManager = PlayerInputManager.Instance;
 

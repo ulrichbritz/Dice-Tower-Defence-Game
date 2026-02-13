@@ -17,6 +17,7 @@ namespace UB
         [HideInInspector] public CharacterStatsManager CharacterStatsManager { get; private set; }
         [HideInInspector] public CharacterEffectsManager CharacterEffectsManager { get; private set; }
         [HideInInspector] public CharacterAnimatorManager CharacterAnimatorManager { get; private set; }
+        [HideInInspector] public CharacterInventoryManager CharacterInventoryManager { get; private set; }
         [HideInInspector] public WorldSpaceHUDManager WorldSpaceHUDManager { get; private set; }
 
         [Header("Flags")]
@@ -50,6 +51,7 @@ namespace UB
             CharacterStatsManager = GetComponent<CharacterStatsManager>();
             CharacterEffectsManager = GetComponent<CharacterEffectsManager>();
             CharacterAnimatorManager = GetComponent<CharacterAnimatorManager>();
+            CharacterInventoryManager = GetComponent<CharacterInventoryManager>();
             WorldSpaceHUDManager = GetComponentInChildren<WorldSpaceHUDManager>();
         }
 

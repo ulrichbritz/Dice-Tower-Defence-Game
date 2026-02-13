@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace UB
@@ -8,6 +9,9 @@ namespace UB
 
         [Header("Weapon Model")]
         public GameObject WeaponModel;
+
+        [Header("Attack Animations")]
+        public List<AnimationClip> AttackAnimations = new List<AnimationClip>();
 
         [Header("Base Weapon Stats")]
         public float BasePhysicalDamage = 0f;   // extra damage added to die roll

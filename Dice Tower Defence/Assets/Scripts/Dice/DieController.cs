@@ -40,6 +40,10 @@ namespace UB
         [Tooltip("Allow runtime changes to face numbers")]
         public bool allowFaceNumberChanges = true;
 
+        [Header("Debug & Calibration")]
+        [SerializeField] private bool showDebugInfo = false;
+        [SerializeField] private bool enableManualTesting = false;
+
         // Components
         private DieRenderer dieRenderer;
         private Rigidbody dieRigidbody;
@@ -69,9 +73,10 @@ namespace UB
             // Store original position for bounce animation
             originalPosition = transform.position;
 
-            // Initialize with face 1 on top (or first face)
+            // Initialize with face 1 on top using corrected rotation
             if (dieData?.DieFaces != null && dieData.DieFaces.Length > 0) {
-                currentTopFace = dieData.DieFaces[0].FaceNumber;
+                currentTopFace = 1; // Default to face 1
+                SetFaceInstant(currentTopFace); // Apply correct rotation immediately
             }
         }
 
@@ -85,6 +90,40 @@ namespace UB
 
             int randomFaceIndex = Random.Range(0, dieData.DieFaces.Length);
             RollToFace(randomFaceIndex);
+        }
+
+        /// <summary>
+        /// Roll the die and return the result after animation completes
+        /// </summary>
+        /// <returns>The face number that was rolled</returns>
+        public async Routine<int> RollDieAndGetResult()
+        {
+            if (isRolling || dieData?.DieFaces == null || dieData.DieFaces.Length == 0)
+                return 0;
+
+            int randomFaceIndex = Random.Range(0, dieData.DieFaces.Length);
+            return await RollToFaceAndGetResult(randomFaceIndex);
+        }
+
+        /// <summary>
+        /// Roll the die to a specific face number and return the result
+        /// </summary>
+        /// <param name="faceNumber">The face number to roll to</param>
+        /// <returns>The face number that was rolled</returns>
+        public async Routine<int> RollToFaceNumberAndGetResult(int faceNumber)
+        {
+            if (isRolling || dieData?.DieFaces == null)
+                return 0;
+
+            // Find the face index for the given number
+            for (int i = 0; i < dieData.DieFaces.Length; i++) {
+                if (dieData.DieFaces[i]?.FaceNumber == faceNumber) {
+                    return await RollToFaceAndGetResult(i);
+                }
+            }
+
+            Debug.LogWarning($"DieController: Face number {faceNumber} not found on die!");
+            return 0;
         }
 
         /// <summary>
@@ -118,6 +157,20 @@ namespace UB
         }
 
         /// <summary>
+        /// Roll the die to show a specific face by index and return the result
+        /// </summary>
+        /// <param name="faceIndex">The index of the face to roll to</param>
+        /// <returns>The face number that was rolled</returns>
+        public async Routine<int> RollToFaceAndGetResult(int faceIndex)
+        {
+            if (isRolling || dieData?.DieFaces == null || faceIndex < 0 || faceIndex >= dieData.DieFaces.Length)
+                return 0;
+
+            await RollAnimation(faceIndex);
+            return currentTopFace;
+        }
+
+        /// <summary>
         /// Animate the die rolling to the target face with bounce
         /// </summary>
         private async Routine RollAnimation(int targetFaceIndex)
@@ -126,8 +179,10 @@ namespace UB
 
             DieFace targetFace = dieData.DieFaces[targetFaceIndex];
             Vector3 startRotation = transform.eulerAngles;
-            Vector3 targetRotation = targetFace.Rotation;
+            Vector3 targetRotation = GetCorrectedRotationForFace(targetFace.FaceNumber);
             Vector3 startPosition = transform.position;
+
+            Debug.Log($"Rolling to face {targetFace.FaceNumber} with corrected rotation {targetRotation}");
 
             // Generate spin rotation (more controlled for bounce effect)
             Vector3 spinRotation;
@@ -168,6 +223,8 @@ namespace UB
             transform.eulerAngles = targetRotation;
             transform.position = originalPosition;
 
+            Debug.Log($"Final rotation set to: {targetRotation}, should show face {targetFace.FaceNumber}");
+
             // Update current top face
             int newTopFace = targetFace.FaceNumber;
             if (newTopFace != currentTopFace) {
@@ -175,8 +232,31 @@ namespace UB
                 currentTopFace = newTopFace;
                 OnRollComplete?.Invoke(currentTopFace);
             }
+            else {
+                // Still fire the event even if it's the same face
+                OnRollComplete?.Invoke(currentTopFace);
+            }
 
             isRolling = false;
+        }
+
+        /// <summary>
+        /// Get the correct rotation for a face number, using standard cube orientations
+        /// <summary>
+        /// Get the correct rotation for a face number, using standard cube orientations
+        /// </summary>
+        private Vector3 GetCorrectedRotationForFace(int faceNumber)
+        {
+            // Corrected cube rotations based on your specific die model
+            switch (faceNumber) {
+                case 1: return new Vector3(0, 0, 0);       // Top
+                case 2: return new Vector3(90, 0, 0);      // Front
+                case 3: return new Vector3(-90, 0, 0);     // Right
+                case 4: return new Vector3(0, 0, 90);      // Left
+                case 5: return new Vector3(180, 0, 0);     // Back (swapped with 6)
+                case 6: return new Vector3(0, 0, -90);     // Bottom (swapped with 5)
+                default: return Vector3.zero;
+            }
         }
 
         /// <summary>
@@ -198,13 +278,12 @@ namespace UB
             if (dieData?.DieFaces == null)
                 return;
 
-            for (int i = 0; i < dieData.DieFaces.Length; i++) {
-                if (dieData.DieFaces[i]?.FaceNumber == faceNumber) {
-                    transform.eulerAngles = dieData.DieFaces[i].Rotation;
-                    currentTopFace = faceNumber;
-                    return;
-                }
-            }
+            // Use corrected rotation instead of DieFace.Rotation
+            Vector3 correctedRotation = GetCorrectedRotationForFace(faceNumber);
+            transform.eulerAngles = correctedRotation;
+            currentTopFace = faceNumber;
+
+            Debug.Log($"Set die instantly to face {faceNumber} with rotation {correctedRotation}");
         }
 
         /// <summary>
@@ -293,6 +372,105 @@ namespace UB
             }
 
             return numbers;
+        }
+
+        /// <summary>
+        /// Debug method to test all face rotations
+        /// </summary>
+        [ContextMenu("Test All Face Rotations")]
+        public void TestAllFaceRotations()
+        {
+            if (dieData?.DieFaces == null) return;
+
+            Debug.Log($"Testing {dieData.DieFaces.Length} face rotations:");
+            for (int i = 0; i < dieData.DieFaces.Length; i++) {
+                DieFace face = dieData.DieFaces[i];
+                Debug.Log($"Face {face.FaceNumber}: Rotation {face.Rotation}");
+            }
+        }
+
+        /// <summary>
+        /// Manually set die to specific face for testing (Editor only)
+        /// </summary>
+        public void TestShowFace(int faceNumber)
+        {
+            if (!enableManualTesting) return;
+
+            SetFaceInstant(faceNumber);
+            Debug.Log($"Die set to show face: {faceNumber} (Current top face: {currentTopFace})");
+        }
+
+        /// <summary>
+        /// Check what face is currently on top based on the transform rotation
+        /// </summary>
+        public int DetectCurrentTopFace()
+        {
+            if (dieData?.DieFaces == null) return 0;
+
+            // Find which face rotation is closest to current rotation
+            float closestAngle = float.MaxValue;
+            int closestFace = 1;
+
+            Vector3 currentEuler = transform.eulerAngles;
+
+            foreach (DieFace face in dieData.DieFaces) {
+                Vector3 faceEuler = face.Rotation;
+
+                // Calculate angular difference
+                float angleDiff = Quaternion.Angle(
+                    Quaternion.Euler(currentEuler),
+                    Quaternion.Euler(faceEuler)
+                );
+
+                if (angleDiff < closestAngle) {
+                    closestAngle = angleDiff;
+                    closestFace = face.FaceNumber;
+                }
+            }
+
+            return closestFace;
+        }
+
+        void OnGUI()
+        {
+            if (!showDebugInfo) return;
+
+            GUILayout.BeginArea(new Rect(Screen.width - 250, 10, 240, 300));
+            GUILayout.Label($"Die Debug Info");
+            GUILayout.Label($"Current Top Face: {currentTopFace}");
+            GUILayout.Label($"Detected Face: {DetectCurrentTopFace()}");
+            GUILayout.Label($"Is Rolling: {isRolling}");
+            GUILayout.Label($"Transform Rotation: {transform.eulerAngles}");
+
+            if (enableManualTesting && !isRolling) {
+                GUILayout.Label("Manual Testing:");
+                if (GUILayout.Button("Show Face 1")) TestShowFace(1);
+                if (GUILayout.Button("Show Face 2")) TestShowFace(2);
+                if (GUILayout.Button("Show Face 3")) TestShowFace(3);
+                if (GUILayout.Button("Show Face 4")) TestShowFace(4);
+                if (GUILayout.Button("Show Face 5")) TestShowFace(5);
+                if (GUILayout.Button("Show Face 6")) TestShowFace(6);
+                if (GUILayout.Button("Random Roll")) RollDie();
+            }
+
+            GUILayout.EndArea();
+        }
+
+        /// <summary>
+        /// Example usage of the new async methods
+        /// </summary>
+        [System.ObsoleteAttribute("This is just an example method showing usage. Remove in production.")]
+        public async void ExampleUsage()
+        {
+            // Roll and wait for result
+            int result = await RollDieAndGetResult();
+            Debug.Log($"Rolled: {result}");
+
+            // Roll specific number and wait for result
+            int sixResult = await RollToFaceNumberAndGetResult(6);
+            Debug.Log($"Rolled for 6, got: {sixResult}");
+
+            // You can now use these results immediately for damage calculations, etc.
         }
     }
 }

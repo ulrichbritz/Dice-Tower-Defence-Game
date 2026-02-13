@@ -30,25 +30,55 @@ namespace UB
         {
             Instantiate(WorldSaveGameManager.Instance.PlayerPrefab);
             await WorldSceneManager.Instance.TransitionToSceneAsync(1, true);
-            // Show the first wave
-            await WorldAIManager.Instance.SpawnCharacters(WorldAIManager.Instance.Zombies);
 
-            // Wait a few seconds before opening the shop
-            await RoutineBase.WaitForSeconds(3f);
-
-            // Open the in-game shop UI
-            PlayerUIManager.Instance.OpenInGameShopMenu();
+            // Start first wave automatically
+            CurrentWaveNumber = 0; // Reset to 0 so StartNextWave() makes it wave 1
+            await StartNextWave();
         }
 
         /// <summary>
         /// Starts the next wave in the game
         /// </summary>
-        public void StartNextWave()
+        public async Routine StartNextWave()
         {
+            // Close shop UI
+            PlayerUIManager.Instance.CloseInGameShopMenu();
+
             // Update wave number
             CurrentWaveNumber++;
             // Set wave in progress flag
             WaveCurrentlyInProgress = true;
+
+            // Spawn enemies for this wave
+            await SpawnWaveEnemies();
+        }
+
+        /// <summary>
+        /// Ends the current wave and opens the shop
+        /// </summary>
+        public async Routine EndWave()
+        {
+            if (!WaveCurrentlyInProgress) return; // Already ended
+
+            WaveCurrentlyInProgress = false;
+
+            // Wait a moment then open shop
+            await DelayedShopOpen();
+        }
+
+        private async Routine SpawnWaveEnemies()
+        {
+            // Spawn enemies based on wave number - you can customize this logic
+            await WorldAIManager.Instance.SpawnCharacters(WorldAIManager.Instance.Zombies);
+        }
+
+        private async Routine DelayedShopOpen()
+        {
+            // Wait a moment before opening shop for dramatic effect
+            await RoutineBase.WaitForSeconds(1f);
+
+            // Open the shop for upgrades
+            PlayerUIManager.Instance.OpenInGameShopMenu();
         }
 
         protected override void OnDestroy()

@@ -17,6 +17,8 @@ MonoBehaviour:
   ItemDescription: A simple handgun.
   ItemID: 0
   WeaponModel: {fileID: 1504159519946743619, guid: 39ba7eddf0e682141a1b55bfba04ee04, type: 3}
+  AttackAnimations:
+  - {fileID: 7400000, guid: f889eabea2c5aa84288697e305031ef4, type: 2}
   BasePhysicalDamage: 1
   BaseAttackSpeed: 1
   BaseCriticalChance: 0

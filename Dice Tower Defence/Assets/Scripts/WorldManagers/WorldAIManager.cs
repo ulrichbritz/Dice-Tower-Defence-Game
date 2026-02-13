@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using AsyncRoutines;
 using UnityEngine;
+using System.Collections;
 
 
 namespace UB
@@ -11,6 +12,9 @@ namespace UB
         public GameObject[] Zombies;
         private List<GameObject> spawnedCharacters = new List<GameObject>();
 
+        // Public access to spawned characters for auto-targeting
+        public List<GameObject> SpawnedCharacters => spawnedCharacters;
+
         [Header("Spawn Settings")]
         [SerializeField] private List<Vector3> enemySpawnPoints = new List<Vector3>();
         [SerializeField] private bool useRandomSpawnPoints = true;
@@ -19,6 +23,16 @@ namespace UB
         protected override void Start()
         {
             base.Start();
+        }
+
+        protected override void Update()
+        {
+            base.Update();
+
+            // Clean up dead enemies and check for wave completion
+            if (GameManager.Instance.WaveCurrentlyInProgress) {
+                CheckWaveCompletion();
+            }
         }
 
         public async Routine SpawnCharacters(GameObject[] groupToSpawn)
@@ -82,6 +96,25 @@ namespace UB
                 }
             }
             spawnedCharacters.Clear();
+        }
+
+        /// <summary>
+        /// Checks if all enemies are dead and ends the wave
+        /// </summary>
+        private void CheckWaveCompletion()
+        {
+            if (spawnedCharacters.Count == 0) {
+                // All enemies are dead, end the wave
+                EndCurrentWave();
+            }
+        }
+
+        /// <summary>
+        /// Ends the current wave and opens the shop
+        /// </summary>
+        private void EndCurrentWave()
+        {
+            GameManager.Instance.EndWave();
         }
 
         /// <summary>
