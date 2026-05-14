@@ -17,7 +17,7 @@ namespace UB
 
         [Header("Debug")]
         [SerializeField] private bool showAttackRange = true;
-        [SerializeField] private bool showDebugInfo = true;
+        [SerializeField] private bool showDebugInfo = false;
 
         protected override void Awake()
         {
@@ -125,10 +125,7 @@ namespace UB
         {
             await base.PerformAttack();
 
-            Debug.Log("PerformAttack called!");
-
             if (playerManager.IsPerformingAction) {
-                Debug.Log("Player is already performing action, skipping attack");
                 return;
             }
 
@@ -142,14 +139,8 @@ namespace UB
             // Use the new async method to get the die result after animation
             int dieResult = await dieController.RollDieAndGetResult();
 
-            Debug.Log($"Die rolled: {dieResult}!");
-
             // Calculate total damage: weapon base * die roll
             float totalDamage = (CurrentWeaponBeingUsed?.CurrentPhysicalDamage ?? 0f) * dieResult;
-
-            Debug.Log($"Total damage: {totalDamage} (weapon: {CurrentWeaponBeingUsed?.CurrentPhysicalDamage ?? 0f} * die: {dieResult})");
-
-            Debug.Log($"Playing attack animation from weapon with {CurrentWeaponBeingUsed.AttackAnimations.Count} animations");
 
             var animation = CurrentWeaponBeingUsed.AttackAnimations[Random.Range(0, CurrentWeaponBeingUsed.AttackAnimations.Count)];
 
@@ -183,8 +174,6 @@ namespace UB
             if (targetStats != null && !targetStats.IsDead) {
                 int damageAmount = Mathf.RoundToInt(damage);
                 targetStats.CurrentCharacterStats.CurrentHealth -= damageAmount;
-
-                Debug.Log($"Dealt {damageAmount} damage to {target.name}! Remaining health: {targetStats.CurrentCharacterStats.CurrentHealth}");
             }
         }
 
